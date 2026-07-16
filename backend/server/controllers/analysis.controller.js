@@ -1,25 +1,95 @@
-const Analysis = require("../models/Analysis");
-const ApiError = require("../utils/ApiError");
-const ApiResponse = require("../utils/ApiResponse");
+import { analyzeContent } from "../services/analysis.service.js";
+import { processUrl } from "../processors/url/index.js";
+import {
+  URL_BLOCKED_ERROR_CODE,
+  URL_BLOCKED_MESSAGE,
+} from "../processors/url/fetchUrl.js";
+import validateUrl from "../utils/urlValidator.js";
 
-exports.createAnalysis = async (req, res, next) => {
+export const analyzeText = async (req, res, next) => {
   try {
-    const analysis = await Analysis.create(req.body);
-    res
-      .status(201)
-      .json(new ApiResponse(201, true, "Analysis created", analysis));
+    const { content } = req.body;
+
+    if (!content || !content.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Content is required.",
+      });
+    }
+
+    const report = await analyzeContent({
+      sourceType: "text",
+      originalInput: content,
+      processedContent: content,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Content analyzed successfully.",
+      data: report,
+    });
   } catch (error) {
-    next(new ApiError(500, "Failed to create analysis", error.message));
+    if (error.code === URL_BLOCKED_ERROR_CODE) {
+      const statusCode = error.originalStatusCode === 429 ? 422 : 403;
+
+      return res.status(statusCode).json({
+        success: false,
+        code: URL_BLOCKED_ERROR_CODE,
+        message: URL_BLOCKED_MESSAGE,
+      });
+    }
+
+    next(error);
   }
 };
 
-exports.getAnalyses = async (req, res, next) => {
+export const analyzeUrl = async (req, res, next) => {
   try {
-    const analyses = await Analysis.find().sort({ createdAt: -1 });
-    res
-      .status(200)
-      .json(new ApiResponse(200, true, "Analyses fetched", analyses));
+    const { url } = req.body;
+
+    const validatedUrl = validateUrl(url);
+
+    const {
+      processedContent,
+      urlMetadata,
+      pageType,
+      pageTypeConfidence,
+      isArticle,
+      message,
+    } = await processUrl(validatedUrl);
+
+    if (!isArticle) {
+      return res.status(400).json({
+        success: false,
+        message,
+        metadata: {
+          pageType,
+          pageTypeConfidence,
+          isArticle,
+          urlMetadata,
+        },
+      });
+    }
+
+    const report = await analyzeContent({
+      sourceType: "url",
+      originalInput: validatedUrl,
+      processedContent,
+    });
+
+    report.metadata.urlMetadata = urlMetadata;
+    report.metadata.pageType = pageType;
+    report.metadata.pageTypeConfidence = pageTypeConfidence;
+    report.metadata.isArticle = isArticle;
+
+    await report.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "URL analyzed successfully.",
+      data: report,
+    });
   } catch (error) {
-    next(new ApiError(500, "Failed to fetch analyses", error.message));
+    next(error);
   }
 };

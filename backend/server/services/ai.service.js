@@ -1,16 +1,15 @@
-const { ai } = require("../config/ai");
+import ai from "../config/ai.js";
 
-const generateSummary = async (prompt) => {
-  if (!ai) {
-    return "AI service is not configured yet.";
-  }
+const MODEL = process.env.GEMINI_MODEL;
 
+export const generateAnalysis = async (prompt) => {
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: MODEL,
     contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+    },
   });
 
-  return response.text;
+  return JSON.parse(response.text);
 };
-
-module.exports = { generateSummary };

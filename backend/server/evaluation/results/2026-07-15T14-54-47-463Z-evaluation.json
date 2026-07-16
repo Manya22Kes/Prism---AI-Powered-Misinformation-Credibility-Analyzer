@@ -1,0 +1,351 @@
+{
+  "startedAt": "2026-07-15T14:52:07.742Z",
+  "finishedAt": "2026-07-15T14:54:47.463Z",
+  "totalCases": 5,
+  "totalAvailableCases": 30,
+  "limit": 5,
+  "results": [
+    {
+      "id": "reliable-science-001",
+      "category": "Reliable scientific news",
+      "title": "Peer-reviewed climate attribution study",
+      "status": "PASS",
+      "passedChecks": 5,
+      "totalChecks": 5,
+      "processingTimeMs": 26516,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Reliable",
+          "actual": "Highly Reliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            85,
+            100
+          ],
+          "actual": 90,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 10,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 90,
+        "manipulation": 5,
+        "bias": 10
+      },
+      "labels": {
+        "overallVerdict": "Highly Reliable",
+        "credibility": "Highly Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "reuters-style-001",
+      "category": "Reuters/AP style reporting",
+      "title": "Central bank leaves rates unchanged",
+      "status": "PASS",
+      "passedChecks": 5,
+      "totalChecks": 5,
+      "processingTimeMs": 34683,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Generally Reliable",
+          "actual": "Generally Reliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            75,
+            95
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            25
+          ],
+          "actual": 15,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 85,
+        "manipulation": 5,
+        "bias": 15
+      },
+      "labels": {
+        "overallVerdict": "Generally Reliable",
+        "credibility": "Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Slightly Biased"
+      }
+    },
+    {
+      "id": "who-announcement-001",
+      "category": "WHO announcements",
+      "title": "WHO vaccine safety update",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 11392,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": false,
+          "expected": "Highly Reliable",
+          "actual": "Generally Reliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            85,
+            100
+          ],
+          "actual": 90,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            15
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            15
+          ],
+          "actual": 10,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 90,
+        "manipulation": 5,
+        "bias": 10
+      },
+      "labels": {
+        "overallVerdict": "Generally Reliable",
+        "credibility": "Highly Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "fake-news-001",
+      "category": "Fake news",
+      "title": "Fabricated celebrity arrest claim",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 46588,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Unreliable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            0,
+            35
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            60,
+            100
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            35,
+            85
+          ],
+          "actual": 80,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [
+            "unnamed",
+            "share",
+            "conspiracy"
+          ],
+          "actual": [
+            "Conspiratorial Allegations",
+            "Manipulative Call to Action"
+          ],
+          "missing": [
+            "unnamed",
+            "conspiracy"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 85,
+        "bias": 80
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Highly Manipulative",
+        "bias": "Highly Biased"
+      }
+    },
+    {
+      "id": "debunked-misinfo-001",
+      "category": "Debunked misinformation",
+      "title": "False election machine rumor",
+      "status": "PASS",
+      "passedChecks": 5,
+      "totalChecks": 5,
+      "processingTimeMs": 35891,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Unreliable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            0,
+            30
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            55,
+            95
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            50,
+            90
+          ],
+          "actual": 90,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [
+            "viral",
+            "no documents",
+            "hiding"
+          ],
+          "actual": [
+            "Unsubstantiated Allegations",
+            "Promotion of Conspiracy Theories"
+          ],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 85,
+        "bias": 90
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Highly Manipulative",
+        "bias": "Extremely Biased"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1186 @@
+{
+  "startedAt": "2026-07-15T15:09:07.185Z",
+  "finishedAt": "2026-07-15T15:13:36.576Z",
+  "totalCases": 30,
+  "totalAvailableCases": 30,
+  "limit": 30,
+  "results": [
+    {
+      "id": "reliable-science-001",
+      "category": "Reliable scientific news",
+      "title": "Peer-reviewed climate attribution study",
+      "status": "PASS",
+      "passedChecks": 5,
+      "totalChecks": 5,
+      "processingTimeMs": 12647,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Reliable",
+          "actual": "Highly Reliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            85,
+            100
+          ],
+          "actual": 90,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 0,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 0,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 90,
+        "manipulation": 0,
+        "bias": 0
+      },
+      "labels": {
+        "overallVerdict": "Highly Reliable",
+        "credibility": "Highly Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "reuters-style-001",
+      "category": "Reuters/AP style reporting",
+      "title": "Central bank leaves rates unchanged",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 13985,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Generally Reliable",
+          "actual": "Generally Reliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            75,
+            95
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            25
+          ],
+          "actual": 10,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [],
+          "actual": [
+            "General Attribution"
+          ],
+          "missing": [
+            "no risk indicators"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 85,
+        "manipulation": 5,
+        "bias": 10
+      },
+      "labels": {
+        "overallVerdict": "Generally Reliable",
+        "credibility": "Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "who-announcement-001",
+      "category": "WHO announcements",
+      "title": "WHO vaccine safety update",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 13331,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": false,
+          "expected": "Highly Reliable",
+          "actual": "Generally Reliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            85,
+            100
+          ],
+          "actual": 90,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            15
+          ],
+          "actual": 0,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            15
+          ],
+          "actual": 0,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 90,
+        "manipulation": 0,
+        "bias": 0
+      },
+      "labels": {
+        "overallVerdict": "Generally Reliable",
+        "credibility": "Highly Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "fake-news-001",
+      "category": "Fake news",
+      "title": "Fabricated celebrity arrest claim",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 19537,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Unreliable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            0,
+            35
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            60,
+            100
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": false,
+          "expected": [
+            35,
+            85
+          ],
+          "actual": 90,
+          "error": 5
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [
+            "unnamed",
+            "share",
+            "conspiracy"
+          ],
+          "actual": [
+            "Lack of Verifiable Sources",
+            "Promotion of Conspiracy Theory",
+            "Manipulative Urgency and Scarcity Tactics"
+          ],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 85,
+        "bias": 90
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Highly Manipulative",
+        "bias": "Extremely Biased"
+      }
+    },
+    {
+      "id": "debunked-misinfo-001",
+      "category": "Debunked misinformation",
+      "title": "False election machine rumor",
+      "status": "PASS",
+      "passedChecks": 5,
+      "totalChecks": 5,
+      "processingTimeMs": 21017,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Unreliable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            0,
+            30
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            55,
+            95
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            50,
+            90
+          ],
+          "actual": 90,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [
+            "viral",
+            "no documents",
+            "hiding"
+          ],
+          "actual": [
+            "Lack of Verifiable Evidence",
+            "Conspiratorial Claims",
+            "Unreliable Source (Viral Post)"
+          ],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 85,
+        "bias": 90
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Highly Manipulative",
+        "bias": "Extremely Biased"
+      }
+    },
+    {
+      "id": "medical-misinfo-001",
+      "category": "Medical misinformation",
+      "title": "Miracle cancer cure",
+      "status": "PASS",
+      "passedChecks": 5,
+      "totalChecks": 5,
+      "processingTimeMs": 15320,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Unreliable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            75,
+            100
+          ],
+          "actual": 95,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            60,
+            100
+          ],
+          "actual": 95,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [
+            "medical",
+            "cure",
+            "buy"
+          ],
+          "actual": [
+            "Unsubstantiated Medical Claims and False Hope",
+            "Conspiratorial Language Against Established Medicine",
+            "Urgent Call to Action for Purchase of Unproven Protocol"
+          ],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 95,
+        "bias": 95
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Extremely Manipulative",
+        "bias": "Extremely Biased"
+      }
+    },
+    {
+      "id": "health-claim-001",
+      "category": "Health claims",
+      "title": "Moderate caffeine claim",
+      "status": "PARTIAL PASS",
+      "passedChecks": 3,
+      "totalChecks": 5,
+      "processingTimeMs": 15200,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": false,
+          "expected": "Generally Reliable",
+          "actual": "Proceed With Caution"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            70,
+            90
+          ],
+          "actual": 78,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 0,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            25
+          ],
+          "actual": 10,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [],
+          "actual": [
+            "Lack of Specific Attribution"
+          ],
+          "missing": [
+            "no risk indicators"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 78,
+        "manipulation": 0,
+        "bias": 10
+      },
+      "labels": {
+        "overallVerdict": "Proceed With Caution",
+        "credibility": "Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "political-opinion-001",
+      "category": "Political opinion",
+      "title": "Opinion column on tax policy",
+      "status": "PARTIAL PASS",
+      "passedChecks": 3,
+      "totalChecks": 5,
+      "processingTimeMs": 20053,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Proceed With Caution",
+          "actual": "Proceed With Caution"
+        },
+        {
+          "name": "credibility",
+          "passed": false,
+          "expected": [
+            45,
+            75
+          ],
+          "actual": 35,
+          "error": 10
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            15,
+            45
+          ],
+          "actual": 25,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            45,
+            85
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [
+            "opinion",
+            "bias"
+          ],
+          "actual": [
+            "Opinion Presented as Fact",
+            "Lack of Specific Attribution",
+            "Advocacy"
+          ],
+          "missing": [
+            "bias"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 35,
+        "manipulation": 25,
+        "bias": 85
+      },
+      "labels": {
+        "overallVerdict": "Proceed With Caution",
+        "credibility": "Questionable",
+        "manipulation": "Slightly Manipulative",
+        "bias": "Highly Biased"
+      }
+    },
+    {
+      "id": "political-reporting-001",
+      "category": "Political reporting",
+      "title": "Legislature passes budget bill",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 15352,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Generally Reliable",
+          "actual": "Generally Reliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            75,
+            95
+          ],
+          "actual": 85,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            25
+          ],
+          "actual": 10,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [],
+          "actual": [
+            "Lack of Specific Primary Source Attribution"
+          ],
+          "missing": [
+            "no risk indicators"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 85,
+        "manipulation": 5,
+        "bias": 10
+      },
+      "labels": {
+        "overallVerdict": "Generally Reliable",
+        "credibility": "Reliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "satire-001",
+      "category": "Satire",
+      "title": "Satirical moon announcement",
+      "status": "FAIL",
+      "passedChecks": 1,
+      "totalChecks": 5,
+      "processingTimeMs": 8801,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": false,
+          "expected": "Questionable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": false,
+          "expected": [
+            10,
+            45
+          ],
+          "actual": 0,
+          "error": 10
+        },
+        {
+          "name": "manipulation",
+          "passed": false,
+          "expected": [
+            10,
+            45
+          ],
+          "actual": 5,
+          "error": 5
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            35
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [
+            "satire",
+            "implausible"
+          ],
+          "actual": [
+            "Extreme Implausibility/Impossibility",
+            "Fabricated or Non-existent Authority"
+          ],
+          "missing": [
+            "satire",
+            "implausible"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 0,
+        "manipulation": 5,
+        "bias": 5
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "clickbait-001",
+      "category": "Clickbait",
+      "title": "Shocking food claim",
+      "status": "FAIL",
+      "passedChecks": 1,
+      "totalChecks": 5,
+      "processingTimeMs": 31726,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": false,
+          "expected": "Questionable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": false,
+          "expected": [
+            20,
+            50
+          ],
+          "actual": 5,
+          "error": 15
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            65,
+            100
+          ],
+          "actual": 98,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": false,
+          "expected": [
+            30,
+            75
+          ],
+          "actual": 95,
+          "error": 20
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [
+            "clickbait",
+            "sensational"
+          ],
+          "actual": [
+            "Unsubstantiated and Vague Assertions",
+            "Lack of Attributed Sources"
+          ],
+          "missing": [
+            "clickbait",
+            "sensational"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 98,
+        "bias": 95
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Extremely Manipulative",
+        "bias": "Extremely Biased"
+      }
+    },
+    {
+      "id": "advertisement-001",
+      "category": "Advertisement",
+      "title": "Supplement marketing copy",
+      "status": "FAIL",
+      "passedChecks": 2,
+      "totalChecks": 5,
+      "processingTimeMs": 20218,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": false,
+          "expected": "Proceed With Caution",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": false,
+          "expected": [
+            35,
+            65
+          ],
+          "actual": 15,
+          "error": 20
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            35,
+            75
+          ],
+          "actual": 55,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": false,
+          "expected": [
+            50,
+            90
+          ],
+          "actual": 95,
+          "error": 5
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [
+            "advertisement",
+            "proprietary",
+            "order"
+          ],
+          "actual": [
+            "Unsupported Health Claims",
+            "Vague/Unsubstantiated Testimonials",
+            "Commercial Promotion and Bias"
+          ],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 15,
+        "manipulation": 55,
+        "bias": 95
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Moderately Manipulative",
+        "bias": "Extremely Biased"
+      }
+    },
+    {
+      "id": "financial-scam-001",
+      "category": "Financial scams",
+      "title": "Guaranteed investment returns",
+      "status": "PASS",
+      "passedChecks": 5,
+      "totalChecks": 5,
+      "processingTimeMs": 19036,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Unreliable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            0,
+            25
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            75,
+            100
+          ],
+          "actual": 90,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            55,
+            95
+          ],
+          "actual": 95,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [
+            "guarantees",
+            "deposit",
+            "zero risk"
+          ],
+          "actual": [
+            "Unrealistic Financial Promises",
+            "Opaque and Pressure-driven Investment Scheme",
+            "Conspiracy and Distrust Framing"
+          ],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 90,
+        "bias": 95
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Extremely Manipulative",
+        "bias": "Extremely Biased"
+      }
+    },
+    {
+      "id": "crypto-scam-001",
+      "category": "Cryptocurrency scams",
+      "title": "Celebrity crypto giveaway",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 20376,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Highly Unreliable",
+          "actual": "Highly Unreliable"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            0,
+            20
+          ],
+          "actual": 5,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            80,
+            100
+          ],
+          "actual": 95,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": false,
+          "expected": [
+            45,
+            85
+          ],
+          "actual": 0,
+          "error": 45
+        },
+        {
+          "name": "riskIndicators",
+          "passed": true,
+          "expected": [
+            "cryptocurrency",
+            "wallet",
+            "act"
+          ],
+          "actual": [
+            "Unrealistic Financial Promise",
+            "Instructions for Direct Fund Transfer to Unverified Address",
+            "Urgency Tactic",
+            "Deceptive Source Attribution"
+          ],
+          "missing": []
+        }
+      ],
+      "scores": {
+        "credibility": 5,
+        "manipulation": 95,
+        "bias": 0
+      },
+      "labels": {
+        "overallVerdict": "Highly Unreliable",
+        "credibility": "Unreliable",
+        "manipulation": "Extremely Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "ai-generated-001",
+      "category": "AI-generated articles",
+      "title": "Generic AI article about productivity",
+      "status": "PARTIAL PASS",
+      "passedChecks": 4,
+      "totalChecks": 5,
+      "processingTimeMs": 15877,
+      "checks": [
+        {
+          "name": "overallVerdict",
+          "passed": true,
+          "expected": "Proceed With Caution",
+          "actual": "Proceed With Caution"
+        },
+        {
+          "name": "credibility",
+          "passed": true,
+          "expected": [
+            45,
+            75
+          ],
+          "actual": 65,
+          "error": 0
+        },
+        {
+          "name": "manipulation",
+          "passed": true,
+          "expected": [
+            0,
+            25
+          ],
+          "actual": 10,
+          "error": 0
+        },
+        {
+          "name": "bias",
+          "passed": true,
+          "expected": [
+            0,
+            30
+          ],
+          "actual": 10,
+          "error": 0
+        },
+        {
+          "name": "riskIndicators",
+          "passed": false,
+          "expected": [
+            "generic",
+            "limited evidence"
+          ],
+          "actual": [
+            "Vague Attribution",
+            "Lack of Specific Evidence"
+          ],
+          "missing": [
+            "generic",
+            "limited evidence"
+          ]
+        }
+      ],
+      "scores": {
+        "credibility": 65,
+        "manipulation": 10,
+        "bias": 10
+      },
+      "labels": {
+        "overallVerdict": "Proceed With Caution",
+        "credibility": "Moderate",
+        "manipulation": "Not Manipulative",
+        "bias": "Unbiased"
+      }
+    },
+    {
+      "id": "blog-post-001",
+      "category": "Blog posts",
+      "title": "Personal remote work blog",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 28.661763929s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"28s\"}]}}"
+    },
+    {
+      "id": "wikipedia-style-001",
+      "category": "Wikipedia-style text",
+      "title": "Volcano encyclopedia entry",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 28.303897177s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"28s\"}]}}"
+    },
+    {
+      "id": "social-media-001",
+      "category": "Social media posts",
+      "title": "Viral school closure rumor",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 27.929125045s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"27s\"}]}}"
+    },
+    {
+      "id": "climate-claim-001",
+      "category": "Climate claims",
+      "title": "Misleading cold weather claim",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 27.608132774s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"27s\"}]}}"
+    },
+    {
+      "id": "crime-reporting-001",
+      "category": "Crime reporting",
+      "title": "Police identify suspect",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 27.328391644s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"27s\"}]}}"
+    },
+    {
+      "id": "education-001",
+      "category": "Education",
+      "title": "District reading scores",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 26.98494672s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"26s\"}]}}"
+    },
+    {
+      "id": "technology-001",
+      "category": "Technology",
+      "title": "Company releases security patch",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 26.713545495s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"26s\"}]}}"
+    },
+    {
+      "id": "entertainment-001",
+      "category": "Entertainment",
+      "title": "Film release announcement",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 26.375991973s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"26s\"}]}}"
+    },
+    {
+      "id": "sports-001",
+      "category": "Sports",
+      "title": "Team wins final",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 26.047878046s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"26s\"}]}}"
+    },
+    {
+      "id": "historical-facts-001",
+      "category": "Historical facts",
+      "title": "Apollo 11 landing",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 25.668793274s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"25s\"}]}}"
+    },
+    {
+      "id": "mixed-factual-opinion-001",
+      "category": "Mixed factual/opinion content",
+      "title": "Transit expansion argument",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 25.27760947s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"25s\"}]}}"
+    },
+    {
+      "id": "medical-advice-001",
+      "category": "Medical misinformation",
+      "title": "Unsafe diabetes advice",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 24.933535655s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"24s\"}]}}"
+    },
+    {
+      "id": "public-safety-001",
+      "category": "Public safety rumor",
+      "title": "Unverified product recall warning",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 24.56621134s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"24s\"}]}}"
+    },
+    {
+      "id": "financial-reporting-001",
+      "category": "Financial reporting",
+      "title": "Quarterly earnings report",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 24.044099572s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"24s\"}]}}"
+    },
+    {
+      "id": "conspiracy-001",
+      "category": "Conspiracy misinformation",
+      "title": "Secret weather control claim",
+      "status": "FAIL",
+      "error": "{\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 23.621826691s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"23s\"}]}}"
+    }
+  ]
+}

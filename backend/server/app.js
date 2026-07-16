@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import analysisRoutes from "./routes/analysis.routes.js";
+import healthRoutes from "./routes/health.routes.js";
 
 const app = express();
 // Global Middleware
@@ -19,14 +21,7 @@ app.use(
     extended: true,
   }),
 );
-
-// Health Check Route
-
-app.get("/api/v1/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Prism API is running.",
-  });
-});
+app.use("/api/v1/analyze", analysisRoutes);
+app.use("/api/v1/health", healthRoutes);
 
 export default app;

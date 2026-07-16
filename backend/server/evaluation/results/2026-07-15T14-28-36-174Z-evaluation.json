@@ -1,0 +1,44 @@
+{
+  "startedAt": "2026-07-15T14:28:34.854Z",
+  "finishedAt": "2026-07-15T14:28:36.174Z",
+  "totalCases": 5,
+  "totalAvailableCases": 30,
+  "limit": 5,
+  "results": [
+    {
+      "id": "reliable-science-001",
+      "category": "Reliable scientific news",
+      "title": "Peer-reviewed climate attribution study",
+      "status": "FAIL",
+      "error": "Cannot convert undefined or null to object"
+    },
+    {
+      "id": "reuters-style-001",
+      "category": "Reuters/AP style reporting",
+      "title": "Central bank leaves rates unchanged",
+      "status": "FAIL",
+      "error": "Cannot convert undefined or null to object"
+    },
+    {
+      "id": "who-announcement-001",
+      "category": "WHO announcements",
+      "title": "WHO vaccine safety update",
+      "status": "FAIL",
+      "error": "Cannot convert undefined or null to object"
+    },
+    {
+      "id": "fake-news-001",
+      "category": "Fake news",
+      "title": "Fabricated celebrity arrest claim",
+      "status": "FAIL",
+      "error": "Cannot convert undefined or null to object"
+    },
+    {
+      "id": "debunked-misinfo-001",
+      "category": "Debunked misinformation",
+      "title": "False election machine rumor",
+      "status": "FAIL",
+      "error": "Cannot convert undefined or null to object"
+    }
+  ]
+}

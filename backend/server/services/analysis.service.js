@@ -1,19 +1,56 @@
-const { generateSummary } = require("./ai.service");
-const { scrapeContent } = require("./scraper.service");
-const { extractTextFromImage } = require("./ocr.service");
+import AnalysisReport from "../models/AnalysisReport.js";
+import { generateHash } from "../utils/hash.js";
+import buildAnalysisPrompt, {
+  PROMPT_VERSION,
+} from "../prompts/analysis.prompt.js";
+import { generateAnalysis } from "./ai.service.js";
+import { normalizeAnalysis } from "../utils/normalizeAnalysis.js";
 
-const analyzeInput = async ({ type, source, filePath }) => {
-  if (type === "url") {
-    const content = await scrapeContent(source);
-    return generateSummary(`Summarize this content: ${content}`);
+export const analyzeContent = async (input) => {
+  const { sourceType, originalInput, processedContent } = input;
+
+  if (!sourceType || !originalInput || !processedContent) {
+    throw new Error("Missing required analysis input.");
   }
 
-  if (type === "image") {
-    const text = await extractTextFromImage(filePath);
-    return generateSummary(`Summarize this extracted text: ${text}`);
-  }
+  const analysisHash = generateHash(processedContent);
 
-  return "Unsupported analysis type";
+  const report = await AnalysisReport.create({
+    status: "processing",
+
+    sourceType,
+
+    originalInput,
+
+    processedContent,
+
+    analysisHash,
+
+    metadata: {
+      provider: "Google",
+      model: process.env.GEMINI_MODEL,
+      processingDuration: 0,
+      analysisVersion: 1,
+      promptVersion: PROMPT_VERSION,
+    },
+  });
+
+  const prompt = buildAnalysisPrompt(processedContent);
+
+  const startTime = Date.now();
+
+  const analysis = await generateAnalysis(prompt);
+
+  const processingDuration = Date.now() - startTime;
+
+  const normalizedAnalysis = normalizeAnalysis(analysis);
+
+  report.analysis = normalizedAnalysis;
+
+  report.status = "completed";
+
+  report.metadata.processingDuration = processingDuration;
+
+  await report.save();
+  return report;
 };
-
-module.exports = { analyzeInput };

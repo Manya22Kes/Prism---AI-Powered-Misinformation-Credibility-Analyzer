@@ -1,12 +1,9 @@
-const express = require("express");
-const {
-  createAnalysis,
-  getAnalyses,
-} = require("../controllers/analysis.controller");
+import express from "express";
+import { analyzeText, analyzeUrl } from "../controllers/analysis.controller.js";
 
 const router = express.Router();
 
-router.post("/", createAnalysis);
-router.get("/", getAnalyses);
+router.post("/text", analyzeText);
+router.post("/url", analyzeUrl);
 
-module.exports = router;
+export default router;
