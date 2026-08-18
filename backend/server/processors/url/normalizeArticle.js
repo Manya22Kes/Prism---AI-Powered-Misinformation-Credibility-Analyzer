@@ -25,7 +25,6 @@ export const normalizeArticle = (text) => {
     throw new Error("Article contains no readable content.");
   }
 
-  // Prevent extremely large articles from exceeding model limits
   if (normalized.length > MAX_ARTICLE_LENGTH) {
     normalized = normalized.slice(0, MAX_ARTICLE_LENGTH);
   }

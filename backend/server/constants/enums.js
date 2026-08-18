@@ -8,7 +8,7 @@ export const OVERALL_VERDICT = [
 
 export const ANALYSIS_STATUS = ["processing", "completed", "failed"];
 
-export const SOURCE_TYPES = ["text", "url", "image", "document"];
+export const SOURCE_TYPES = ["text", "url", "image", "document", "pdf", "docx", "pptx", "audio"];
 
 export const CREDIBILITY_LABELS = [
   "Unreliable",
@@ -49,6 +49,10 @@ export const SEVERITY_LEVELS = [
   "Moderate",
   "High",
   "Critical",
+  "LOW",
+  "MEDIUM",
+  "HIGH",
+  "CRITICAL",
 ];
 
 export const MANIPULATION_LABELS = [
@@ -58,3 +62,37 @@ export const MANIPULATION_LABELS = [
   "Highly Manipulative",
   "Extremely Manipulative",
 ];
+
+export const CLAIM_VERIFICATION_STATUS = [
+  "Verified",
+  "Corroborated",
+  "Partially Supported",
+  "Contested",
+  "Unsupported",
+  "Contradicted",
+  "Unverified",
+];
+
+export const CLAIM_INVESTIGATION_VERDICTS = [
+  "Verified",
+  "Corroborated",
+  "Partially Supported",
+  "Contested",
+  "Unsupported",
+  "Contradicted",
+  "Unverified",
+];
+
+export const ARTICLE_INTENT_TYPES = [
+  "Research Reporting",
+  "Opinion / Commentary",
+  "News Reporting",
+  "Satire / Parody",
+  "Marketing / Promotional",
+  "Legal / Policy",
+  "Educational",
+  "Entertainment",
+  "Other",
+];
+
+export const FINDING_RELATIONSHIP_TYPES = ["supports", "contradicts", "depends on"];

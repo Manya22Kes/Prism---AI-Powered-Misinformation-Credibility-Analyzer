@@ -6,7 +6,7 @@ import buildAnalysisPrompt, {
 import { generateAnalysis } from "./ai.service.js";
 import { normalizeAnalysis } from "../utils/normalizeAnalysis.js";
 
-export const analyzeContent = async (input) => {
+export const analyzeContent = async (input, onProgress) => {
   const { sourceType, originalInput, processedContent } = input;
 
   if (!sourceType || !originalInput || !processedContent) {
@@ -30,7 +30,7 @@ export const analyzeContent = async (input) => {
       provider: "Google",
       model: process.env.GEMINI_MODEL,
       processingDuration: 0,
-      analysisVersion: 1,
+      analysisVersion: 4,
       promptVersion: PROMPT_VERSION,
     },
   });
@@ -39,11 +39,27 @@ export const analyzeContent = async (input) => {
 
   const startTime = Date.now();
 
-  const analysis = await generateAnalysis(prompt);
+  if (onProgress) {
+    onProgress({ stage: "analyzing", message: "Investigating major claims & analyzing evidence..." });
+  }
+
+  const progressTimer = setTimeout(() => {
+    if (onProgress) {
+      onProgress({ stage: "finalize", message: "Deriving overall verdict, trust drivers & credibility signals..." });
+    }
+  }, 3500);
+
+  let analysis;
+  try {
+    analysis = await generateAnalysis(prompt);
+  } finally {
+    clearTimeout(progressTimer);
+  }
 
   const processingDuration = Date.now() - startTime;
 
   const normalizedAnalysis = normalizeAnalysis(analysis);
+  normalizedAnalysis.rawAiOutput = analysis;
 
   report.analysis = normalizedAnalysis;
 

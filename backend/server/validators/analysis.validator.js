@@ -8,4 +8,4 @@ const createAnalysisSchema = z.object({
   tags: z.array(z.string()).optional(),
 });
 
-module.exports = { createAnalysisSchema };
+export { createAnalysisSchema };

@@ -14,6 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/speech": "^7.5.0",
+    "@google-cloud/vision": "^5.3.7",
     "@google/genai": "^2.10.0",
     "@mozilla/readability": "^0.6.0",
     "axios": "^1.18.1",
@@ -26,10 +28,16 @@
     "helmet": "^8.2.0",
     "jsdom": "^29.1.1",
     "jsonwebtoken": "^9.0.3",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.0",
     "mongoose": "^9.7.4",
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
+    "music-metadata": "^11.14.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.1.200",
     "tesseract.js": "^7.0.0",
+    "undici": "^7.29.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

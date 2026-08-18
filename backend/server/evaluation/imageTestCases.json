@@ -1,0 +1,14 @@
+[
+  {
+    "id": "test_screenshot_1",
+    "description": "A screenshot containing clear text",
+    "filename": "screenshot1.png",
+    "expectedContents": ["expected", "keywords"]
+  },
+  {
+    "id": "test_meme_1",
+    "description": "A meme with messy text",
+    "filename": "meme1.jpg",
+    "expectedContents": ["bottom text"]
+  }
+]
