@@ -232,10 +232,10 @@ export const AnalysisPipeline = ({
         ) : (
           <div 
             className={cn(
-              "flex flex-col items-center justify-start pointer-events-auto max-h-[86vh] sm:max-h-[88vh] pt-5 pb-6 px-4 sm:px-7 max-w-[calc(100vw-1.5rem)] sm:max-w-[450px] w-full bg-prism-surface/95 dark:bg-black/90 backdrop-blur-2xl rounded-3xl border border-prism-border shadow-2xl relative transition-all duration-300",
+              "flex flex-col items-center pointer-events-auto backdrop-blur-2xl rounded-3xl border border-prism-border shadow-2xl relative transition-all duration-300",
               failoverNotice 
-                ? "overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgba(59,130,246,0.6)_transparent] dark:[scrollbar-color:rgba(245,158,11,0.5)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-blue-600/70 dark:[&::-webkit-scrollbar-thumb]:bg-amber-500/60 hover:[&::-webkit-scrollbar-thumb]:bg-blue-500 dark:hover:[&::-webkit-scrollbar-thumb]:bg-amber-400 [&::-webkit-scrollbar-thumb]:rounded-full pr-2.5 sm:pr-4"
-                : "overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                ? "justify-start max-h-[86vh] sm:max-h-[88vh] pt-5 pb-6 px-4 sm:px-7 max-w-[calc(100vw-1.5rem)] sm:max-w-[450px] w-full bg-prism-surface/95 dark:bg-black/90 overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgba(59,130,246,0.6)_transparent] dark:[scrollbar-color:rgba(245,158,11,0.5)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-blue-600/70 dark:[&::-webkit-scrollbar-thumb]:bg-amber-500/60 hover:[&::-webkit-scrollbar-thumb]:bg-blue-500 dark:hover:[&::-webkit-scrollbar-thumb]:bg-amber-400 [&::-webkit-scrollbar-thumb]:rounded-full pr-2.5 sm:pr-4"
+                : "justify-center max-h-[90vh] py-6 px-6 sm:px-9 max-w-[calc(100vw-2rem)] bg-prism-surface/95 dark:bg-black/85 overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             )}
           >
             
