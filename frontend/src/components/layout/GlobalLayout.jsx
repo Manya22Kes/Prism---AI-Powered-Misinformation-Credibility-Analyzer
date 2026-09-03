@@ -36,7 +36,10 @@ const AmbientCursorGlow = React.memo(() => {
 
 const GlobalLayout = ({ children }) => {
   const location = useLocation();
-  const showUI = true;
+  const { openingSequenceStep, isSequenceComplete } = useCinematicStore();
+
+  const isHomePage = location.pathname === '/';
+  const showUI = isSequenceComplete || !isHomePage || openingSequenceStep >= 6;
 
   return (
     <div className="relative min-h-screen text-prism-text-primary overflow-hidden transition-colors duration-500 bg-transparent">
@@ -63,23 +66,33 @@ const GlobalLayout = ({ children }) => {
         )}
       </AnimatePresence>
 
-      {/* Floating Application Shell */}
-      <div className="relative z-10 flex h-screen w-full bg-transparent">
-        {/* Sidebar */}
-        <Sidebar />
-        
-        <main className="flex-1 flex flex-col h-full relative bg-transparent">
-          {/* Navbar */}
-          <div className="w-full">
-            <Navbar />
-          </div>
-          
-          {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 md:p-12 w-full max-w-screen-2xl mx-auto">
-            {children}
-          </div>
-        </main>
-      </div>
+      {/* Floating Application Shell - Hidden during fullscreen intro, revealed gracefully at step 6 */}
+      <AnimatePresence>
+        {showUI && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="relative z-10 flex h-screen w-full bg-transparent"
+          >
+            {/* Sidebar */}
+            <Sidebar />
+            
+            <main className="flex-1 flex flex-col h-full relative bg-transparent">
+              {/* Navbar */}
+              <div className="w-full">
+                <Navbar />
+              </div>
+              
+              {/* Main Content Area */}
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 md:p-12 w-full max-w-screen-2xl mx-auto">
+                {children}
+              </div>
+            </main>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <ComparisonActionBar />
     </div>
   );
