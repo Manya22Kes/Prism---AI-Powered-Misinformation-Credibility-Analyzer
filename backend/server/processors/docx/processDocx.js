@@ -3,7 +3,12 @@ import extractText from "./extractText.js";
 import normalizeDocxText from "./normalizeDocxText.js";
 
 
-const processDocx = async (fileBuffer, mimetype, size) => {
+const processDocx = async (file) => {
+  const fileBuffer = file.buffer || file;
+  const mimetype = file.mimetype || file.mimeType || "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  const size = file.size || (fileBuffer?.length ?? 0);
+  const originalname = file.originalname || "document.docx";
+
   // 1. Validation
   validateDocx(fileBuffer, mimetype, size);
 
@@ -16,6 +21,7 @@ const processDocx = async (fileBuffer, mimetype, size) => {
   // 4. Construct Final Metadata
   const docxMetadata = {
     file: {
+      originalname,
       mimeType: mimetype,
       size,
     },
@@ -29,7 +35,7 @@ const processDocx = async (fileBuffer, mimetype, size) => {
   // 5. Return Standard Processor Contract
   return {
     sourceType: "docx",
-    originalInput: "docx_buffer", // We do not store the buffer itself in the contract to save memory
+    originalInput: originalname,
     processedContent: normalizedText,
     metadata: docxMetadata,
   };

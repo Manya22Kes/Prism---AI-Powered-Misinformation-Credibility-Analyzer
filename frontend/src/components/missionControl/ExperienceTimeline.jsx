@@ -19,15 +19,15 @@ export const ExperienceTimeline = () => {
 
   return (
     <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-xl relative overflow-hidden space-y-6">
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
-        <h3 className="text-lg font-light text-white">Experience Timeline</h3>
+      <div className="flex items-center justify-between border-b border-prism-text-primary/10 pb-4">
+        <h3 className="text-lg font-light text-prism-text-primary">Experience Timeline</h3>
         <span className="text-xs font-mono text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">LIVE</span>
       </div>
 
       <div ref={scrollRef} className="space-y-1 font-mono text-xs text-gray-300 max-h-[400px] overflow-y-auto pr-2 scroll-smooth">
         {eventHistory.map((event) => {
           let label = event.eventType;
-          let sublabel = '';
+          let sublabel;
           
           if (event.eventType === 'PIPELINE_STAGE_TRANSITION') {
             sublabel = `${event.payload?.from || 'none'} → ${event.payload?.to || 'none'}`;
@@ -47,20 +47,20 @@ export const ExperienceTimeline = () => {
           }
 
           return (
-            <div key={event.id} className="flex flex-col py-2 border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors rounded px-2 -mx-2">
+            <div key={event.id} className="flex flex-col py-2 border-b border-prism-text-primary/5 last:border-0 hover:bg-white/[0.02] transition-colors rounded px-2 -mx-2">
               <div className="flex gap-6 items-start">
-                <span className="text-white/40 w-16 shrink-0 mt-[1px]">{formatTime(event.timestamp)}</span>
+                <span className="text-prism-text-primary/40 w-16 shrink-0 mt-[1px]">{formatTime(event.timestamp)}</span>
                 <div className="flex flex-col">
                   <span className={
                     event.eventType === 'ANALYSIS_FAILED' ? 'text-red-400' :
                     event.eventType.includes('COMPLETED') ? 'text-emerald-400' :
                     event.eventType.includes('TRANSITION') ? 'text-cyan-400' :
-                    'text-white'
+                    'text-prism-text-primary'
                   }>
                     {label}
                   </span>
                   {sublabel && (
-                    <span className="text-white/50 mt-1">{sublabel}</span>
+                    <span className="text-prism-text-primary/50 mt-1">{sublabel}</span>
                   )}
                 </div>
               </div>
@@ -69,7 +69,7 @@ export const ExperienceTimeline = () => {
         })}
         
         {eventHistory.length === 0 && (
-          <div className="text-white/40 italic py-4">No events recorded in current session.</div>
+          <div className="text-prism-text-primary/40 italic py-4">No events recorded in current session.</div>
         )}
       </div>
     </div>

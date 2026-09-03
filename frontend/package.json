@@ -1,7 +1,9 @@
 {
-  "name": "frontend",
+  "name": "prism-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "4.2.0",
+  "description": "Interactive web console for Prism AI Credibility Intelligence featuring 3D ambient mascot and claim-centric analytics",
+  "author": "Manya Keserwani",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,6 +19,7 @@
     "axios": "^1.18.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.42.2",
+    "jspdf": "^4.2.1",
     "lucide-react": "^1.26.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -30,6 +33,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@tailwindcss/cli": "^4.3.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",

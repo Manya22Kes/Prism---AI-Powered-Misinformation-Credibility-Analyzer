@@ -2,14 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
-export const Card = React.forwardRef(({ className, glass = true, hover = false, children, ...props }, ref) => {
+export const Card = React.forwardRef(({ className, glass = true, hover = false, variant = 'pink', children, ...props }, ref) => {
+  const glassClass = variant === 'blue' ? "glass-panel-blue" : "glass-panel";
   return (
     <motion.div
       ref={ref}
       whileHover={hover ? { y: -2, transition: { duration: 0.2 } } : {}}
       className={cn(
         "rounded-2xl overflow-hidden transition-all duration-300 ease-out",
-        glass ? "glass-panel" : "bg-prism-surface border border-prism-border shadow-prism-sm",
+        glass ? glassClass : "bg-prism-surface border border-prism-border shadow-prism-sm",
         hover && "hover:shadow-prism-glow hover:border-prism-accent/30",
         className
       )}

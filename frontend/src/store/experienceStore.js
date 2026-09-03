@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useCinematicStore } from './cinematicStore';
 
 // State Priorities Engine (Higher number overrides lower number)
 export const STATE_PRIORITIES = {
@@ -36,8 +37,13 @@ export const useExperienceStore = create((set, get) => ({
   // Continuous Environmental Intensity (0 - 10)
   environmentalIntensity: 0,
   
-  // Environmental Profile: 'workspace', 'report', 'archive', 'missionControl', 'watchlist'
+  // Environmental Profile: 'workspace', 'report', 'reading', 'archive', 'missionControl', 'watchlist'
   environmentalProfile: 'workspace',
+  
+  // Reading Mode State, Awards Show Sweep & Interruption Guard
+  isReadingMode: false,
+  isTransitioningReadingMode: false,
+  readingModeWipe: null, // 'enter' | 'exit' | null
   
   // Experience Timeline Event History
   eventHistory: [],
@@ -50,6 +56,77 @@ export const useExperienceStore = create((set, get) => ({
       set({ environmentalProfile: profile });
       get().recordExperienceEvent('PROFILE_TRANSITION', { from: currentProfile, to: profile });
     }
+  },
+
+  // Awards Show Style Screen Sweep Reading Mode Transition
+  enterReadingMode: (reducedMotion = false) => {
+    if (get().isReadingMode) return;
+    
+    // Immediately set reading mode so UI reacts instantaneously
+    set({ isReadingMode: true, isTransitioningReadingMode: true });
+    get().setProfile('reading');
+
+    const cinematic = useCinematicStore.getState();
+    if (cinematic?.setEnvironmentReading) {
+      cinematic.setEnvironmentReading();
+    }
+
+    if (reducedMotion) {
+      set({ isTransitioningReadingMode: false, readingModeWipe: null });
+      if (cinematic?.setPrismPosition) {
+        cinematic.setPrismPosition([0, -20, -50]);
+        cinematic.setPrismScale(0.001);
+      }
+      return;
+    }
+
+    // Trigger the Awards Show Mascot Sweep from Left to Right
+    set({ readingModeWipe: 'enter' });
+    if (cinematic?.setPrismState) cinematic.setPrismState('active');
+
+    // Sweep completes at 1000ms: mascot clears offscreen
+    setTimeout(() => {
+      set({ readingModeWipe: null, isTransitioningReadingMode: false });
+      if (cinematic?.setPrismPosition) {
+        cinematic.setPrismPosition([0, -20, -50]);
+        cinematic.setPrismScale(0.001);
+      }
+    }, 1000);
+  },
+
+  exitReadingMode: (reducedMotion = false) => {
+    if (!get().isReadingMode) return;
+
+    // Immediately revert reading mode so UI reacts instantaneously
+    set({ isReadingMode: false, isTransitioningReadingMode: true });
+    get().setProfile('report');
+
+    const cinematic = useCinematicStore.getState();
+    if (cinematic?.setEnvironmentWorkspace) {
+      cinematic.setEnvironmentWorkspace();
+    }
+
+    if (reducedMotion) {
+      set({ isTransitioningReadingMode: false, readingModeWipe: null });
+      if (cinematic?.setPrismPosition) {
+        cinematic.setPrismPosition([4, -2, -5]);
+        cinematic.setPrismScale(1);
+      }
+      return;
+    }
+
+    // Trigger Return Sweep across screen back to position
+    set({ readingModeWipe: 'exit' });
+    if (cinematic?.setPrismState) cinematic.setPrismState('active');
+
+    // Sweep completes and settles at 1000ms
+    setTimeout(() => {
+      set({ readingModeWipe: null, isTransitioningReadingMode: false });
+      if (cinematic?.setPrismPosition) {
+        cinematic.setPrismPosition([4, -2, -5]);
+        cinematic.setPrismScale(1);
+      }
+    }, 1000);
   },
   
   // Internal helper to evaluate highest priority active state

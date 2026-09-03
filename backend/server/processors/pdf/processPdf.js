@@ -15,6 +15,7 @@ const processPdf = async (file) => {
 
   const metadata = {
     file: {
+      originalname: file.originalname,
       mimeType: file.mimetype,
       size: file.size
     },

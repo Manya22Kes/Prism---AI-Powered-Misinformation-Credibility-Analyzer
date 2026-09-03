@@ -1,34 +1,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Pin, Layers, Link2, FileText, ChevronRight, ShieldCheck, Trash2, AlertCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, Pin, ShieldCheck, AlertCircle, Library } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { historyApi } from '../services/api/history.api';
-import { Card } from '../components/shared/Card';
+import { EmptyState } from '../components/shared/EmptyState';
 import { Button } from '../components/shared/Button';
 import { cn } from '../utils/cn';
 import { useCinematicStore } from '../store/cinematicStore';
+import { ReportCard } from '../components/report/ReportCard';
 
-const TypeIcon = ({ type }) => {
-  switch (type) {
-    case 'batch': return <Layers size={18} />;
-    case 'url': return <Link2 size={18} />;
-    case 'file': return <FileText size={18} />;
-    default: return <FileText size={18} />;
-  }
-};
 
-const getScoreColor = (score) => {
-  if (score >= 80) return 'text-prism-cyan';
-  if (score >= 50) return 'text-yellow-400';
-  return 'text-red-500';
-};
-
-const getScoreBgGlow = (score) => {
-  if (score >= 80) return 'from-prism-cyan/20 to-transparent';
-  if (score >= 50) return 'from-yellow-400/20 to-transparent';
-  return 'from-red-500/20 to-transparent';
-};
 
 export const AnalysisArchive = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -69,11 +51,19 @@ export const AnalysisArchive = () => {
       });
       return { previousData };
     },
-    onError: (err, id, context) => {
-      queryClient.setQueryData(['history'], context.previousData);
-    },
-    onSettled: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['history'] });
+      if (data && data.isPinned) {
+        toast.success('Report pinned');
+      } else {
+        toast.success('Report unpinned');
+      }
+    },
+    onError: (err, id, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(['history'], context.previousData);
+      }
+      toast.error('Failed to update pin status');
     }
   });
 
@@ -101,45 +91,48 @@ export const AnalysisArchive = () => {
     }
   });
 
-  const handlePin = (e, id) => {
-    e.preventDefault(); // prevent link navigation
-    e.stopPropagation();
-    pinMutation.mutate(id);
-  };
-
-  const handleDeleteClick = (e, id) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setItemToDelete(id);
-  };
-
-  const confirmDelete = () => {
-    if (itemToDelete) {
-      deleteMutation.mutate(itemToDelete);
-    }
-  };
-
-  const cancelDelete = () => {
-    setItemToDelete(null);
-  };
-
   const archiveData = (response?.data || []).map((item) => {
     const analysis = item.analysis || {};
     const metadata = item.metadata || {};
     const isBatch = item.isBatch;
     
-    // Attempt to extract source URL/domain for searching and display
-    const url = metadata.urlMetadata?.canonicalUrl || metadata.urlMetadata?.domain || '';
+    let calculatedTitle;
+    let subtitle = '';
+
+    if (isBatch) {
+      calculatedTitle = 'Batch Analysis Synthesis';
+      subtitle = 'Batch Process';
+    } else {
+      // Use explicit title, or filename, or a snippet of the text, or fallback
+      calculatedTitle = metadata.title || metadata.file?.originalname;
+      
+      if (!calculatedTitle && item.originalInput && item.sourceType === 'text') {
+        calculatedTitle = item.originalInput.length > 50 
+          ? item.originalInput.substring(0, 50) + '...' 
+          : item.originalInput;
+      }
+      
+      calculatedTitle = calculatedTitle || 'Analysis Report';
+      
+      if (metadata.urlMetadata?.canonicalUrl || metadata.urlMetadata?.domain) {
+        subtitle = metadata.urlMetadata.canonicalUrl || metadata.urlMetadata.domain;
+      } else if (metadata.file?.originalname && calculatedTitle !== metadata.file.originalname) {
+        subtitle = metadata.file.originalname;
+      } else if (item.sourceType) {
+        subtitle = `${item.sourceType.charAt(0).toUpperCase() + item.sourceType.slice(1)} Analysis`;
+      }
+    }
 
     return {
       id: item._id,
-      title: isBatch ? 'Batch Analysis Synthesis' : (metadata.title || metadata.file?.originalname || metadata.sourceType || 'Analysis Report'),
-      type: isBatch ? 'batch' : (metadata.sourceType?.toLowerCase() || 'text'),
-      sourceUrl: url,
+      title: calculatedTitle,
+      type: isBatch ? 'batch' : (item.sourceType?.toLowerCase() || 'text'),
+      sourceUrl: subtitle,
       score: isBatch ? (analysis.sourceComparisons?.consistencyScore || 0) : (analysis.score || (analysis.credibility?.score || 0)),
       verdict: isBatch ? (analysis.overallCredibility || 'Mixed') : (analysis.overallVerdict?.label || analysis.verdict || 'Unknown'),
       date: new Date(item.createdAt).toLocaleDateString(),
       isPinned: !!item.isPinned,
+      isBatch: !!isBatch,
     };
   });
 
@@ -156,29 +149,29 @@ export const AnalysisArchive = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto h-full flex flex-col pb-20 pt-8 relative">
+    <div className="max-w-7xl mx-auto h-full flex flex-col pb-12 pt-6 relative">
       
       {/* Background Vault Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-prism-accent/5 blur-[120px] pointer-events-none rounded-full" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-emerald-500/5 blur-[120px] pointer-events-none rounded-full" />
 
-      <div className="mb-12 text-center relative z-10">
+      <div className="mb-8 text-center relative z-10 flex flex-col items-center">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full glass-panel-strong border-prism-accent/30 text-prism-accent text-xs font-semibold tracking-widest uppercase shadow-[0_0_15px_rgba(34,211,238,0.2)]"
+          className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full glass-panel-strong border-prism-cyan/30 text-prism-cyan text-xs font-semibold tracking-widest uppercase shadow-[0_0_15px_rgba(34,211,238,0.2)]"
         >
-          <ShieldCheck size={16} /> Secure Vault
+          <Library size={16} /> Everything Analyzed
         </motion.div>
         <h2 className="text-5xl font-light tracking-tight text-prism-text-primary mb-4">
           Analysis Archive
         </h2>
         <p className="text-lg text-prism-text-secondary max-w-2xl mx-auto font-light">
-          Review, search, and synthesize past credibility reports stored securely in the intelligence vault.
+          Complete historical record of all single documents, web links, raw texts, and batch runs analyzed by Prism.
         </p>
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-12 z-20 relative max-w-4xl mx-auto w-full">
+      <div className="flex flex-col sm:flex-row gap-4 mb-8 z-20 relative max-w-4xl mx-auto w-full">
         <div className="relative flex-1 group">
           <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-prism-text-muted group-focus-within:text-prism-accent transition-colors" size={20} />
           <input 
@@ -240,89 +233,18 @@ export const AnalysisArchive = () => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
+                  className="relative block h-full group"
                 >
-                  <Link to={item.type === 'batch' ? `/batch/${item.id}` : `/report/${item.id}`} className="block h-full relative">
-                    
-                    {/* Delete Confirmation Overlay (Local) */}
-                    <AnimatePresence>
-                      {itemToDelete === item.id && (
-                        <motion.div 
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="absolute inset-0 z-50 glass-panel-strong backdrop-blur-xl rounded-2xl flex flex-col items-center justify-center p-6 text-center border-red-500/30"
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                        >
-                          <Trash2 size={32} className="text-red-400 mb-3" />
-                          <h4 className="text-lg font-medium text-prism-text-primary mb-1">Delete Analysis?</h4>
-                          <p className="text-xs text-prism-text-secondary mb-6">This action is permanent and cannot be undone.</p>
-                          <div className="flex gap-3 w-full">
-                            <Button variant="outline" size="sm" className="flex-1" onClick={cancelDelete}>Cancel</Button>
-                            <Button variant="primary" size="sm" className="flex-1 bg-red-500/20 text-red-500 border-red-500/50 hover:bg-red-500/30" onClick={confirmDelete}>
-                              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
-                            </Button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <Card glass hover className="h-full p-0 flex flex-col relative overflow-hidden group bg-prism-surface-active/20">
-                      
-                      {/* Glowing Accent based on score */}
-                      <div className={cn("absolute top-0 left-0 w-full h-32 bg-gradient-to-b opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none", getScoreBgGlow(item.score))} />
-                      
-                      <div className="p-6 relative z-10 flex flex-col h-full">
-                        <div className="flex justify-between items-start mb-6">
-                          <div className="p-3 rounded-xl bg-prism-surface border border-prism-border text-prism-text-secondary group-hover:text-prism-text-primary transition-colors shadow-inner">
-                            <TypeIcon type={item.type} />
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className="text-xs font-mono text-prism-text-muted">{item.date}</span>
-                            <button 
-                              onClick={(e) => handlePin(e, item.id)}
-                              className={cn("p-1.5 rounded-md transition-colors", item.isPinned ? "text-prism-accent bg-prism-accent/10" : "text-prism-text-muted hover:bg-prism-surface-hover")}
-                              title={item.isPinned ? "Unpin report" : "Pin report"}
-                            >
-                              <Pin size={16} className={item.isPinned ? "fill-current" : ""} />
-                            </button>
-                            <button 
-                              onClick={(e) => handleDeleteClick(e, item.id)}
-                              className="p-1.5 rounded-md text-prism-text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors"
-                              title="Delete report"
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </div>
-                        </div>
-
-                        <h4 className="text-lg font-medium text-prism-text-primary mb-2 line-clamp-2 leading-snug group-hover:text-prism-cyan transition-colors">
-                          {item.title}
-                        </h4>
-                        
-                        {item.sourceUrl && (
-                          <p className="text-xs font-mono text-prism-text-muted line-clamp-1 mb-2 truncate">
-                            {item.sourceUrl}
-                          </p>
-                        )}
-                        
-                        <div className="mt-auto pt-6 flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="relative flex items-center justify-center w-12 h-12 rounded-full border border-prism-border bg-prism-surface/50">
-                              <span className={cn("text-lg font-bold font-mono tracking-tighter", getScoreColor(item.score))}>{item.score}</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-[10px] uppercase tracking-widest text-prism-text-muted mb-0.5">Verdict</span>
-                              <span className="text-xs font-semibold text-prism-text-primary tracking-wide uppercase">{item.verdict}</span>
-                            </div>
-                          </div>
-                          
-                          <div className="w-8 h-8 rounded-full border border-prism-border flex items-center justify-center bg-prism-surface group-hover:bg-prism-surface-hover group-hover:border-prism-accent/50 transition-all">
-                            <ChevronRight size={14} className="text-prism-text-muted group-hover:text-prism-cyan transition-colors translate-x-[-1px] group-hover:translate-x-[1px]" />
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </Link>
+                  <ReportCard
+                    item={item}
+                    variant="card"
+                    isDeleting={itemToDelete === item.id}
+                    deletePending={deleteMutation.isPending}
+                    onPin={() => pinMutation.mutate(item.id)}
+                    onDelete={() => setItemToDelete(item.id)}
+                    onConfirmDelete={() => deleteMutation.mutate(item.id)}
+                    onCancelDelete={() => setItemToDelete(null)}
+                  />
                 </motion.div>
               ))}
             </div>
@@ -331,26 +253,19 @@ export const AnalysisArchive = () => {
         
         {/* Empty States */}
         {!isLoading && !isError && filteredData.length === 0 && (
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-24 flex flex-col items-center"
-          >
-            <ShieldCheck size={56} className="text-prism-text-muted/30 mb-6" />
-            <h3 className="text-2xl font-light text-prism-text-primary mb-3">
-              {filter === 'pinned' ? 'Nothing pinned yet.' : 'No analyses yet.'}
-            </h3>
-            <p className="text-prism-text-secondary font-light max-w-sm mb-8">
-              {filter === 'pinned' 
-                ? 'Pin analyses you want to keep close and they will appear here.'
-                : 'Analyze an article, document, URL, or image and your results will appear here.'}
-            </p>
-            {filter === 'all' && (
-              <Link to="/">
-                <Button variant="primary" className="px-8">Analyze Something</Button>
-              </Link>
-            )}
-          </motion.div>
+          <div className="py-6 flex justify-center">
+            <EmptyState 
+              icon={searchQuery ? Search : ShieldCheck}
+              title={searchQuery ? 'No results found' : (filter === 'pinned' ? 'Nothing pinned yet.' : 'No analyses yet.')}
+              description={searchQuery 
+                ? `No reports matched your search for "${searchQuery}".` 
+                : (filter === 'pinned' 
+                  ? 'Pin analyses you want to keep close and they will appear here.'
+                  : 'Analyze an article, document, URL, or image and your results will appear here.')}
+              actionLabel={!searchQuery && filter === 'all' ? 'Analyze Something' : undefined}
+              onAction={!searchQuery && filter === 'all' ? () => window.location.href = '/' : undefined}
+            />
+          </div>
         )}
       </div>
     </div>

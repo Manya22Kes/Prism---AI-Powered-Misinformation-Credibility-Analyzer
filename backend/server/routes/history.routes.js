@@ -1,13 +1,16 @@
 import express from 'express';
-import { getHistory, getReportById, getBatchReportById, togglePinStatus, deleteReport } from '../controllers/history.controller.js';
+import { getHistory, getReportById, getBatchReportById, togglePinStatus, deleteReport, getSavedReports, toggleSaveStatus } from '../controllers/history.controller.js';
+import validateObjectId from '../middlewares/validateObjectId.js';
 
 const router = express.Router();
 
 router.get('/', getHistory);
-router.get('/report/:id', getReportById);
-router.get('/batch/:id', getBatchReportById);
+router.get('/saved', getSavedReports);
+router.get('/report/:id', validateObjectId, getReportById);
+router.get('/batch/:id', validateObjectId, getBatchReportById);
 
-router.patch('/:id/pin', togglePinStatus);
-router.delete('/:id', deleteReport);
+router.patch('/:id/pin', validateObjectId, togglePinStatus);
+router.patch('/:id/save', validateObjectId, toggleSaveStatus);
+router.delete('/:id', validateObjectId, deleteReport);
 
 export default router;

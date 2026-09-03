@@ -10,6 +10,12 @@ const batchAnalysisReportSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
+    
+    isSaved: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
 
     status: {
       type: String,
@@ -49,10 +55,17 @@ const batchAnalysisReportSchema = new mongoose.Schema(
       }
     ],
 
+    reports: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "AnalysisReport",
+      }
+    ],
+
     analysis: {
       overallCredibility: {
         type: String,
-        enum: ["High", "Medium", "Low", "Mixed"],
+        enum: ["High", "Medium", "Low", "Mixed", "Not Applicable"],
         required: true,
       },
       
@@ -91,6 +104,8 @@ const batchAnalysisReportSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+batchAnalysisReportSchema.index({ createdAt: -1 });
 
 const BatchAnalysisReport = mongoose.model("BatchAnalysisReport", batchAnalysisReportSchema);
 

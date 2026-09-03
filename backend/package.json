@@ -1,18 +1,25 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
+  "name": "prism-backend",
+  "version": "4.2.0",
+  "description": "Multi-modal AI credibility & misinformation intelligence engine powered by Google Gemini 3.7 Flash",
   "type": "module",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
-    "evaluate": "node server/evaluation/evaluator.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "evaluate": "node server/evaluation/evaluator.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "misinformation",
+    "credibility",
+    "fact-checking",
+    "gemini-3.7-flash",
+    "multimodal",
+    "nlp",
+    "intelligence-analysis"
+  ],
+  "author": "Manya Keserwani",
+  "license": "MIT",
   "dependencies": {
     "@google-cloud/speech": "^7.5.0",
     "@google-cloud/vision": "^5.3.7",
@@ -25,6 +32,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
     "helmet": "^8.2.0",
     "jsdom": "^29.1.1",
     "jsonwebtoken": "^9.0.3",
@@ -38,6 +46,7 @@
     "pdfjs-dist": "^6.1.200",
     "tesseract.js": "^7.0.0",
     "undici": "^7.29.0",
+    "winston": "^3.19.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

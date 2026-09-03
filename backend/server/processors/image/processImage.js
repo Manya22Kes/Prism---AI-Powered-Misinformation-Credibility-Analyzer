@@ -23,6 +23,7 @@ const processImagePipeline = async (file) => {
     processedContent: normalizedText,
     metadata: {
       file: {
+        originalname: file.originalname,
         mimeType: file.mimetype,
         size: file.size,
       },

@@ -8,11 +8,29 @@ import GlobalLayout from './components/layout/GlobalLayout';
 import { CinematicLayer } from './components/canvas/CinematicLayer';
 import { AnimatedRoutes } from './AnimatedRoutes';
 
-// Create a client
-const queryClient = new QueryClient();
+import { useSettingsStore } from './store/settingsStore';
+
+import { ErrorBoundary } from './components/shared/ErrorBoundary';
+
+// Create a client with performance-optimized caching options
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes fresh cache
+      gcTime: 1000 * 60 * 15, // 15 minutes garbage collection
+      refetchOnWindowFocus: false,
+      retry: 2,
+    },
+  },
+});
 
 function App() {
   const { theme } = useThemeStore();
+  const initializeSettings = useSettingsStore((state) => state.initialize);
+
+  useEffect(() => {
+    initializeSettings();
+  }, [initializeSettings]);
 
   // Apply theme to html root
   useEffect(() => {
@@ -28,14 +46,16 @@ function App() {
   }, [theme]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <CinematicLayer />
-        <GlobalLayout>
-          <AnimatedRoutes />
-        </GlobalLayout>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <CinematicLayer />
+          <GlobalLayout>
+            <AnimatedRoutes />
+          </GlobalLayout>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

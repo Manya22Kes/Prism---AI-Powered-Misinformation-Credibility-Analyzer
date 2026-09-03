@@ -23,77 +23,31 @@ export const ContradictionGraph = ({ contradictions }) => {
 
       <div className="relative z-10 space-y-4">
         {contradictions.map((item, idx) => {
-          const isActive = activeId === idx;
-          
           return (
             <motion.div
               key={idx}
-              layout
-              onMouseEnter={() => setActiveId(idx)}
-              onMouseLeave={() => setActiveId(null)}
-              className={cn(
-                "p-5 rounded-xl border transition-all duration-300 cursor-default",
-                isActive ? "bg-prism-surface-hover border-prism-low/50 shadow-prism-glow-danger" : "bg-prism-bg/50 border-prism-border"
-              )}
+              className="p-6 rounded-xl border transition-all duration-300 bg-prism-bg/50 border-prism-border hover:border-prism-low/30 hover:bg-prism-surface-hover"
             >
-              <div className="flex flex-col md:flex-row gap-6 md:items-center">
+              <div className="flex flex-col gap-4">
                 
-                {/* Source A */}
-                <div className="flex-1 flex flex-col gap-2">
+                {/* Disputed Claim */}
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2 text-xs text-prism-text-muted">
-                    <FileText size={14} />
-                    <span className="uppercase tracking-wider font-semibold">{item.sourceA.name}</span>
+                    <AlertTriangle size={14} className="text-prism-low" />
+                    <span className="uppercase tracking-wider font-semibold text-prism-low">Disputed Claim</span>
                   </div>
-                  <p className="text-sm font-medium text-prism-text-primary italic">
-                    "{item.sourceA.claim}"
+                  <p className="text-base font-medium text-prism-text-primary italic border-l-2 border-prism-low/30 pl-4 py-1">
+                    "{item.claim}"
                   </p>
                 </div>
 
-                {/* Connection Node */}
-                <div className="flex items-center justify-center relative px-4">
-                  <div className={cn(
-                    "w-full absolute top-1/2 -translate-y-1/2 h-px -z-10 transition-colors",
-                    isActive ? "bg-prism-low" : "bg-prism-border"
-                  )} />
-                  <motion.div 
-                    animate={{ rotate: isActive ? 90 : 0, scale: isActive ? 1.1 : 1 }}
-                    className={cn(
-                      "p-2 rounded-full border bg-prism-bg z-10 transition-colors",
-                      isActive ? "text-prism-low border-prism-low" : "text-prism-text-muted border-prism-border"
-                    )}
-                  >
-                    <Network size={16} />
-                  </motion.div>
-                </div>
-
-                {/* Source B */}
-                <div className="flex-1 flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-xs text-prism-text-muted">
-                    <FileText size={14} />
-                    <span className="uppercase tracking-wider font-semibold">{item.sourceB.name}</span>
-                  </div>
-                  <p className="text-sm font-medium text-prism-text-primary italic">
-                    "{item.sourceB.claim}"
-                  </p>
+                {/* Conflict Explanation */}
+                <div className="mt-2 pt-4 border-t border-prism-border/50 text-sm text-prism-text-secondary leading-relaxed">
+                  <span className="text-prism-low font-semibold text-[10px] uppercase tracking-wider block mb-1">Nature of Conflict: </span>
+                  {item.conflict}
                 </div>
 
               </div>
-
-              <AnimatePresence>
-                {isActive && (
-                  <motion.div 
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="mt-4 pt-4 border-t border-prism-border/50 text-sm text-prism-text-secondary leading-relaxed">
-                      <span className="text-prism-low font-semibold">AI Synthesis: </span>
-                      {item.synthesis}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           );
         })}

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* =======================================================
@@ -8,17 +9,17 @@
   /* --- 1. Typography Scale --- */
   --font-sans: "Inter", "Outfit", system-ui, sans-serif;
   --font-mono: "Fira Code", monospace;
-  --text-xs: 0.75rem;     /* 12px */
-  --text-sm: 0.875rem;    /* 14px */
-  --text-base: 1rem;      /* 16px */
-  --text-lg: 1.125rem;    /* 18px */
-  --text-xl: 1.25rem;     /* 20px */
-  --text-2xl: 1.5rem;     /* 24px */
-  --text-3xl: 2rem;       /* 32px */
-  --text-4xl: 2.5rem;     /* 40px */
-  --text-5xl: 3rem;       /* 48px */
+  --text-xs: 0.75rem;     
+  --text-sm: 0.875rem;    
+  --text-base: 1rem;      
+  --text-lg: 1.125rem;    
+  --text-xl: 1.25rem;     
+  --text-2xl: 1.5rem;     
+  --text-3xl: 2rem;       
+  --text-4xl: 2.5rem;     
+  --text-5xl: 3rem;       
 
-  /* --- 2. Color Tokens --- */
+  /* --- 2. Color Tokens (Dynamic via CSS Variables) --- */
   --color-prism-bg: var(--theme-prism-bg);
   --color-prism-surface: var(--theme-prism-surface);
   --color-prism-surface-hover: var(--theme-prism-surface-hover);
@@ -34,44 +35,42 @@
   --color-prism-accent-glow: var(--theme-prism-accent-glow);
   --color-prism-cyan: var(--theme-prism-cyan);
   
-  /* Score Colors (Semantic) */
-  --color-prism-high: #10b981;     /* Emerald */
-  --color-prism-medium: #f59e0b;   /* Amber */
-  --color-prism-low: #ef4444;      /* Crimson */
-  --color-prism-neutral: #64748b;  /* Slate */
+  /* Score Colors (Semantic & Static) */
+  --color-prism-high: #10b981;     
+  --color-prism-medium: #f59e0b;   
+  --color-prism-low: #ef4444;      
+  --color-prism-neutral: #64748b;  
 
   /* --- 3. Glass System --- */
   --backdrop-blur-sm: 4px;
   --backdrop-blur-md: 8px;
   --backdrop-blur-lg: 12px;
-  --bg-glass: linear-gradient(135deg, rgba(17, 21, 32, 0.75) 0%, rgba(13, 17, 28, 0.85) 100%);
-  --bg-glass-strong: linear-gradient(135deg, rgba(12, 15, 24, 0.90) 0%, rgba(8, 10, 18, 0.95) 100%);
-
+  /* Glass backgrounds map directly to native variables */
+  
   /* --- 4. Shadows & Elevation --- */
-  --shadow-prism-sm: 0 1px 2px 0 rgba(0,0,0,0.4);
-  --shadow-prism-md: 0 4px 6px -1px rgba(0,0,0,0.5), 0 2px 4px -2px rgba(0,0,0,0.5);
-  --shadow-prism-lg: 0 10px 15px -3px rgba(0,0,0,0.6), 0 4px 6px -4px rgba(0,0,0,0.6);
+  --shadow-prism-sm: var(--theme-shadow-prism-sm);
+  --shadow-prism-md: var(--theme-shadow-prism-md);
+  --shadow-prism-lg: var(--theme-shadow-prism-lg);
   --shadow-prism-glow: 0 0 25px rgba(129, 140, 248, 0.15);
   --shadow-prism-glow-active: 0 0 35px rgba(129, 140, 248, 0.25);
   --shadow-prism-glow-danger: 0 0 25px rgba(239, 68, 68, 0.15);
   --shadow-prism-glow-success: 0 0 25px rgba(16, 185, 129, 0.15);
 
   /* --- 5. Border Radius --- */
-  --radius-sm: 0.25rem;   /* 4px */
-  --radius-md: 0.375rem;  /* 6px */
-  --radius-lg: 0.5rem;    /* 8px */
-  --radius-xl: 0.75rem;   /* 12px */
-  --radius-2xl: 1rem;     /* 16px */
+  --radius-sm: 0.25rem;   
+  --radius-md: 0.375rem;  
+  --radius-lg: 0.5rem;    
+  --radius-xl: 0.75rem;   
+  --radius-2xl: 1rem;     
   --radius-pill: 9999px;
 
-  /* --- 6. Motion Tokens (Durations & Easings) --- */
+  /* --- 6. Motion Tokens --- */
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* --- 7. Grid & Spacing Scale --- */
   /* --- 7. Grid & Spacing Scale --- */
   --spacing-0: 0px;
   --spacing-1: 0.25rem;
@@ -85,6 +84,9 @@
   --spacing-24: 6rem;
 }
 
+/* =======================================================
+ * NATIVE CSS VARIABLES (Dynamic Values)
+ * ======================================================= */
 :root {
   /* Dark Theme (Default) */
   --theme-prism-bg: #07090e; 
@@ -101,32 +103,47 @@
   --theme-prism-accent: #818cf8;       
   --theme-prism-accent-glow: rgba(129, 140, 248, 0.2);
   --theme-prism-cyan: #22d3ee;
+  
+  --bg-glass: linear-gradient(135deg, rgba(17, 21, 32, 0.75) 0%, rgba(13, 17, 28, 0.85) 100%);
+  --bg-glass-strong: linear-gradient(135deg, rgba(12, 15, 24, 0.90) 0%, rgba(8, 10, 18, 0.95) 100%);
+  --bg-glass-blue: linear-gradient(135deg, rgba(14, 28, 48, 0.75) 0%, rgba(10, 22, 40, 0.85) 100%);
+  --theme-prism-border-blue: rgba(34, 211, 238, 0.2);
+
+  --theme-shadow-prism-sm: 0 1px 2px 0 rgba(0,0,0,0.4);
+  --theme-shadow-prism-md: 0 4px 6px -1px rgba(0,0,0,0.5), 0 2px 4px -2px rgba(0,0,0,0.5);
+  --theme-shadow-prism-lg: 0 10px 15px -3px rgba(0,0,0,0.6), 0 4px 6px -4px rgba(0,0,0,0.6);
 }
 
 :root[data-theme="light"],
 html.light,
 html[data-theme="light"] {
-  --theme-prism-bg: #f7f7f5; /* Warm architectural paper & stone studio tone */
-  --theme-prism-surface: #ffffff;
-  --theme-prism-surface-hover: #efefe8;
-  --theme-prism-surface-active: #e5e5dc;
-  --theme-prism-border: #d4d4ca;
-  --theme-prism-border-light: rgba(28, 25, 23, 0.08);
+  /* Light Theme - Glass Light Pink & Soft Sky Blue Harmony */
+  --theme-prism-bg: #fcf9fb; 
+  --theme-prism-surface: #fdf2f7; 
+  --theme-prism-surface-hover: #fce7f3;
+  --theme-prism-surface-active: #fbcfe8;
+  --theme-prism-border: rgba(244, 63, 94, 0.20);
+  --theme-prism-border-light: rgba(244, 63, 94, 0.10);
   
-  --theme-prism-text-primary: #1c1917; /* Warm charcoal stone */
+  --theme-prism-text-primary: #1c1917; 
   --theme-prism-text-secondary: #44403c;
   --theme-prism-text-muted: #78716c;
 
-  --theme-prism-accent: #4f46e5;
-  --theme-prism-accent-glow: rgba(79, 70, 229, 0.12);
+  --theme-prism-accent: #6366f1;
+  --theme-prism-accent-glow: rgba(99, 102, 241, 0.15);
   --theme-prism-cyan: #0284c7;
   
-  --bg-glass: rgba(255, 255, 255, 0.85);
-  --bg-glass-strong: rgba(247, 247, 245, 0.94);
+  /* Delicate Glass Light Pink */
+  --bg-glass: linear-gradient(135deg, rgba(255, 242, 248, 0.88) 0%, rgba(254, 228, 240, 0.76) 50%, rgba(253, 218, 233, 0.68) 100%);
+  --bg-glass-strong: linear-gradient(135deg, rgba(255, 245, 250, 0.94) 0%, rgba(253, 224, 238, 0.88) 40%, rgba(250, 205, 226, 0.82) 100%);
 
-  --shadow-prism-sm: 0 1px 3px 0 rgba(28, 25, 23, 0.04);
-  --shadow-prism-md: 0 4px 20px -2px rgba(28, 25, 23, 0.08), 0 2px 6px -1px rgba(28, 25, 23, 0.04);
-  --shadow-prism-lg: 0 12px 36px -4px rgba(28, 25, 23, 0.12), 0 4px 12px -2px rgba(28, 25, 23, 0.06);
+  /* Translucent Glass Light Blue for alternate boxes */
+  --bg-glass-blue: linear-gradient(135deg, rgba(240, 249, 255, 0.88) 0%, rgba(224, 242, 254, 0.76) 50%, rgba(210, 236, 254, 0.68) 100%);
+  --theme-prism-border-blue: rgba(2, 132, 199, 0.20);
+
+  --theme-shadow-prism-sm: 0 1px 3px 0 rgba(244, 63, 94, 0.04);
+  --theme-shadow-prism-md: 0 6px 24px -2px rgba(244, 63, 94, 0.07), 0 2px 6px -1px rgba(28, 25, 23, 0.03);
+  --theme-shadow-prism-lg: 0 14px 40px -4px rgba(244, 63, 94, 0.10), 0 4px 12px -2px rgba(28, 25, 23, 0.04);
 }
 
 /* =======================================================
@@ -169,21 +186,18 @@ html[data-theme="light"] {
     @apply backdrop-blur-[var(--backdrop-blur-lg)] border border-prism-border shadow-prism-lg;
   }
 
+  .glass-panel-blue {
+    background: var(--bg-glass-blue);
+    border-color: var(--theme-prism-border-blue);
+    @apply backdrop-blur-[var(--backdrop-blur-md)] border shadow-prism-md;
+  }
+
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-prism-accent focus:ring-offset-2 focus:ring-offset-prism-bg;
   }
 
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-prism-cyan to-prism-accent;
-  }
-}
-
-/* =======================================================
- * GLOBAL BASE STYLES
- * ======================================================= */
-@layer base {
-  button:focus-visible, a:focus-visible {
-    @apply outline-none ring-2 ring-prism-accent ring-offset-2 ring-offset-prism-bg;
   }
 }
 
@@ -207,5 +221,14 @@ html[data-theme="light"] {
   .text-white, .text-gray-200, .text-gray-300, .text-prism-text-primary {
     color: #0f172a !important;
   }
+}
+
+/* Reduced Motion overrides */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
 }
 

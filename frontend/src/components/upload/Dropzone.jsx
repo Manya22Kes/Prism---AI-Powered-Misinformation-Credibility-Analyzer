@@ -34,17 +34,23 @@ export const Dropzone = ({ onFilesSelected, maxFiles = 1, acceptedTypes = "*/*",
     emitExperienceEvent('UPLOAD_HOVER_END');
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const droppedFiles = Array.from(e.dataTransfer.files).slice(0, maxFiles);
-      setFiles(droppedFiles);
-      if (onFilesSelected) onFilesSelected(droppedFiles);
+      const newFiles = Array.from(e.dataTransfer.files);
+      setFiles(prev => {
+        const combined = [...prev, ...newFiles].slice(0, maxFiles);
+        if (onFilesSelected) onFilesSelected(combined);
+        return combined;
+      });
     }
   };
 
   const handleFileSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      const selectedFiles = Array.from(e.target.files).slice(0, maxFiles);
-      setFiles(selectedFiles);
-      if (onFilesSelected) onFilesSelected(selectedFiles);
+      const newFiles = Array.from(e.target.files);
+      setFiles(prev => {
+        const combined = [...prev, ...newFiles].slice(0, maxFiles);
+        if (onFilesSelected) onFilesSelected(combined);
+        return combined;
+      });
     }
   };
 

@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { useMousePosition } from '../../hooks/useMousePosition';
 import { useCinematicStore } from '../../store/cinematicStore';
 import { useThemeStore } from '../../store/themeStore';
+import { useSettingsStore } from '../../store/settingsStore';
 import { useExperienceStore } from '../../store/experienceStore';
 import { PrismMascot } from './PrismMascot';
 import { cn } from '../../utils/cn';
@@ -25,7 +26,8 @@ const VolumetricDustCloud = ({ openingSequenceStep, theme }) => {
   const environmentalIntensity = useExperienceStore((state) => state.environmentalIntensity);
   const activeEnvironmentState = useExperienceStore((state) => state.activeEnvironmentState);
   const environmentalProfile = useExperienceStore((state) => state.environmentalProfile);
-  
+  const reducedMotion = useSettingsStore((state) => state.settings.reducedMotion);
+
   // 1500 bright golden/white dust specks around the central light beam & prism
   const [positions] = useMemo(() => {
     const pos = new Float32Array(1500 * 3);
@@ -40,6 +42,7 @@ const VolumetricDustCloud = ({ openingSequenceStep, theme }) => {
   const matRef = useRef();
 
   useFrame((state, delta) => {
+    if (reducedMotion) return;
     if (ref.current) {
       const speedMult = activeEnvironmentState === 'processing' ? 1.0 + (environmentalIntensity * 0.15) : 1.0;
       ref.current.rotation.y += delta * 0.04 * speedMult;
@@ -49,6 +52,7 @@ const VolumetricDustCloud = ({ openingSequenceStep, theme }) => {
       // Glow intensely when beam arrives & hits prism (step >= 2)
       let targetOpacity = openingSequenceStep >= 2 ? 0.65 : 0.08;
       
+      if (environmentalProfile === 'reading') targetOpacity *= 0.25;
       if (environmentalProfile === 'report') targetOpacity *= 0.5;
       if (environmentalProfile === 'archive') targetOpacity *= 0.6;
       
@@ -61,11 +65,11 @@ const VolumetricDustCloud = ({ openingSequenceStep, theme }) => {
       <PointMaterial 
         ref={matRef}
         transparent 
-        color={theme === 'light' ? '#0f172a' : '#fef3c7'} 
-        size={theme === 'light' ? 0.12 : 0.08} // Larger, darker specks in Light mode
+        color={theme === 'light' ? '#dc2626' : '#fef3c7'} 
+        size={theme === 'light' ? 0.11 : 0.08}
         sizeAttenuation={true} 
         depthWrite={false}
-        opacity={theme === 'light' ? 0.75 : 0.45}
+        opacity={theme === 'light' ? 0.65 : 0.45}
         blending={theme === 'light' ? THREE.NormalBlending : THREE.AdditiveBlending}
       />
     </Points>
@@ -122,6 +126,7 @@ const ParticleField = ({ mousePosition, openingSequenceStep, theme }) => {
       
       // Apply baseline environmental profile modifiers additively
       switch (environmentalProfile) {
+        case 'reading': timeScale *= 0.15; break;
         case 'report': timeScale *= 0.4; break;
         case 'archive': timeScale *= 0.2; break;
         case 'missionControl': timeScale *= 1.2; break;
@@ -205,11 +210,12 @@ const ParticleField = ({ mousePosition, openingSequenceStep, theme }) => {
         <PointMaterial 
           ref={matRef}
           transparent 
-          color={theme === 'light' ? '#1c1917' : (openingSequenceStep >= 2 ? '#fef3c7' : '#f8fafc')} 
-          size={theme === 'light' ? 0.065 : 0.045}
+          color={theme === 'light' ? '#ef4444' : (openingSequenceStep >= 2 ? '#fef3c7' : '#f8fafc')} 
+          size={theme === 'light' ? 0.068 : 0.045}
           sizeAttenuation={true} 
           depthWrite={false}
-          opacity={0.55}
+          opacity={theme === 'light' ? 0.60 : 0.55}
+          blending={THREE.NormalBlending}
         />
       </Points>
     </group>
@@ -405,9 +411,76 @@ const TwinFlankingPrisms = ({ mousePosition }) => {
   );
 };
 
+// Dynamic Anchor handling both standard floating interpolation and Awards-Show Screen Sweeps
+const SmoothPrismAnchor = ({ prismPosition, prismScale, mousePosition, readingModeWipe }) => {
+  const groupRef = useRef();
+  const wipeStartTime = useRef(null);
+  const prevWipe = useRef(null);
+
+  useFrame((state, delta) => {
+    if (!groupRef.current) return;
+
+    if (readingModeWipe) {
+      if (prevWipe.current !== readingModeWipe) {
+        prevWipe.current = readingModeWipe;
+        wipeStartTime.current = performance.now();
+      }
+
+      const elapsed = performance.now() - wipeStartTime.current;
+      const progress = Math.min(Math.max(elapsed / 1000, 0), 1);
+      
+      const eased = progress < 0.5 
+        ? 4 * progress * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      if (readingModeWipe === 'enter') {
+        // Sweeps across from offscreen left (-18) to offscreen right (+18)
+        const startX = -18;
+        const endX = 18;
+        const currentX = startX + (endX - startX) * eased;
+        const currentY = Math.sin(progress * Math.PI) * 1.6;
+        const currentZ = 1.4;
+
+        groupRef.current.position.set(currentX, currentY, currentZ);
+        groupRef.current.scale.set(2.8, 2.8, 2.8);
+        groupRef.current.rotation.y += delta * 4.5;
+        groupRef.current.rotation.z = Math.sin(progress * Math.PI) * 0.45;
+      } else if (readingModeWipe === 'exit') {
+        // Sweeps across from offscreen right (+18) back to resting position [4, -2, -5]
+        const startX = 18;
+        const endX = 4;
+        const currentX = startX + (endX - startX) * eased;
+        const currentY = (1 - eased) * 1.6 + eased * -2;
+        const currentZ = (1 - eased) * 1.4 + eased * -5;
+        const currentScale = (1 - eased) * 2.8 + eased * 1.0;
+
+        groupRef.current.position.set(currentX, currentY, currentZ);
+        groupRef.current.scale.set(currentScale, currentScale, currentScale);
+        groupRef.current.rotation.y += delta * 3.5;
+      }
+    } else {
+      prevWipe.current = null;
+      const targetPos = new THREE.Vector3(...prismPosition);
+      groupRef.current.position.lerp(targetPos, Math.min(delta * 5, 1));
+      
+      const currentScale = groupRef.current.scale.x;
+      const targetScale = typeof prismScale === 'number' ? prismScale : 1;
+      const newScale = THREE.MathUtils.lerp(currentScale, targetScale, Math.min(delta * 5, 1));
+      groupRef.current.scale.set(newScale, newScale, newScale);
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={prismPosition} scale={prismScale}>
+      <PrismMascot mousePosition={mousePosition} />
+    </group>
+  );
+};
+
 export const CinematicLayer = ({ className }) => {
   const mousePosition = useMousePosition();
   const { ambientIntensity, prismPosition, prismScale, openingSequenceStep, isSequenceComplete, skipSequence } = useCinematicStore();
+  const readingModeWipe = useExperienceStore((state) => state.readingModeWipe);
   const { theme } = useThemeStore();
 
   useEffect(() => {
@@ -435,10 +508,10 @@ export const CinematicLayer = ({ className }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onClick={skipSequence}
-          className="absolute top-6 right-6 z-50 pointer-events-auto px-4 py-2 rounded-full font-mono text-xs uppercase tracking-widest bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/20 backdrop-blur-md transition-all flex items-center gap-2"
+          className="absolute top-6 right-6 z-50 pointer-events-auto px-4 py-2 rounded-full font-mono text-xs uppercase tracking-widest bg-prism-text-primary/10 hover:bg-prism-text-primary/20 text-prism-text-primary/80 hover:text-prism-text-primary border border-prism-text-primary/20 backdrop-blur-md transition-all flex items-center gap-2"
         >
           <span>Skip Intro</span>
-          <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded text-white/90">ESC</span>
+          <span className="text-[10px] bg-prism-text-primary/20 px-1.5 py-0.5 rounded text-prism-text-primary/90">ESC</span>
         </motion.button>
       )}
 
@@ -489,7 +562,7 @@ export const CinematicLayer = ({ className }) => {
                 >
                   {!isTransformed ? (
                     // Plausible Claim Fragment in Darkness
-                    <div className={cn("font-mono text-xs p-3.5 rounded-lg backdrop-blur-sm shadow-lg leading-relaxed tracking-wide border", isLight ? "text-slate-700 bg-white/50 border-slate-200" : "text-gray-300 bg-white/[0.03] border-white/[0.08]")}>
+                    <div className={cn("font-mono text-xs p-3.5 rounded-lg backdrop-blur-sm shadow-lg leading-relaxed tracking-wide border", isLight ? "text-slate-700 bg-prism-text-primary/50 border-slate-200" : "text-gray-300 bg-white/[0.03] border-white/[0.08]")}>
                       <span className={cn("mr-2", isLight ? "text-slate-500" : "text-amber-400/80")}>?</span>
                       "{item.raw}"
                     </div>
@@ -546,10 +619,10 @@ export const CinematicLayer = ({ className }) => {
             transition={{ duration: 2, ease: "easeOut" }}
             className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center pointer-events-none"
           >
-            <h1 className={cn("text-7xl md:text-8xl font-extralight tracking-[0.35em] uppercase mb-4 font-sans", isLight ? "text-slate-900" : "text-white")}>
+            <h1 className={cn("text-7xl md:text-8xl font-extralight tracking-[0.35em] uppercase mb-4 font-sans", isLight ? "text-slate-900" : "text-prism-text-primary")}>
               PRISM
             </h1>
-            <p className={cn("text-xs md:text-sm font-serif italic tracking-[0.3em] font-light border-t pt-4 px-10", isLight ? "text-slate-600 border-slate-300" : "text-gray-300 border-white/10")}>
+            <p className={cn("text-xs md:text-sm font-serif italic tracking-[0.3em] font-light border-t pt-4 px-10", isLight ? "text-slate-600 border-slate-300" : "text-gray-300 border-prism-text-primary/10")}>
               Misinformation & Credibility Analyzer
             </p>
           </motion.div>
@@ -581,12 +654,44 @@ export const CinematicLayer = ({ className }) => {
           )}
           
           {(isSequenceComplete || openingSequenceStep >= 3) && openingSequenceStep !== 6 && (
-            <group position={prismPosition} scale={prismScale}>
-              <PrismMascot mousePosition={mousePosition} />
-            </group>
+            <SmoothPrismAnchor 
+              prismPosition={prismPosition} 
+              prismScale={prismScale} 
+              mousePosition={mousePosition}
+              readingModeWipe={readingModeWipe}
+            />
           )}
         </Canvas>
       </div>
+
+      {/* Awards Show Style Broadcast Optical Light Streak Wipe */}
+      <AnimatePresence>
+        {readingModeWipe && (
+          <div className="fixed inset-0 overflow-hidden pointer-events-none z-30">
+            <motion.div
+              key={`awards-wipe-${readingModeWipe}`}
+              initial={{ left: readingModeWipe === 'enter' ? '-30%' : '110%', opacity: 0 }}
+              animate={{ 
+                left: readingModeWipe === 'enter' ? '110%' : '-30%',
+                opacity: [0, 0.85, 1, 0]
+              }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.95, ease: [0.25, 0.1, 0.25, 1.0] }}
+              className={cn(
+                "absolute inset-y-0 w-72 sm:w-96 pointer-events-none",
+                isLight ? "mix-blend-normal" : "mix-blend-screen"
+              )}
+              style={{
+                background: isLight
+                  ? 'linear-gradient(90deg, transparent, rgba(220,38,38,0.25), rgba(239,68,68,0.5), rgba(244,63,94,0.35), transparent)'
+                  : 'linear-gradient(90deg, transparent, rgba(34,211,238,0.5), rgba(255,255,255,0.9), rgba(168,85,247,0.5), transparent)',
+                transform: 'skewX(-20deg)',
+                filter: 'blur(12px)'
+              }}
+            />
+          </div>
+        )}
+      </AnimatePresence>
       
       {/* Subtle Vignette Overlay */}
       {!isLight && (

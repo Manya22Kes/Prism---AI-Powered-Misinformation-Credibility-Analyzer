@@ -41,8 +41,7 @@ const processBatch = async (files) => {
         stats.containsDocuments = true;
       }
       else if (file.mimetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
-        // processPptx signature: fileBuffer, mimetype, size
-        processorResult = await processPptx(file.buffer, file.mimetype, file.size);
+        processorResult = await processPptx(file);
         stats.containsDocuments = true;
       }
       else if (file.mimetype.startsWith('image/')) {
@@ -90,7 +89,7 @@ const processBatch = async (files) => {
   stats.totalCharacters = totalCharacters;
   stats.truncated = { isTruncated, reason };
   stats.files = successfulFiles.map(f => ({
-    filename: f.originalName,
+    filename: f.originalInput || f.originalName || "Unknown_File",
     sourceType: f.sourceType,
     metadata: f.metadata
   }));
@@ -100,6 +99,7 @@ const processBatch = async (files) => {
     sourceType: "batch",
     originalInput: "batch_upload",
     processedContent: mergedText,
+    successfulFiles,
     failedFiles,
     metadata: {
       batch: stats

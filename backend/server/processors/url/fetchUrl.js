@@ -1,4 +1,8 @@
 import axios from "axios";
+import dns from "dns";
+import net from "net";
+import http from "http";
+import https from "https";
 
 const DEFAULT_TIMEOUT = 10000;
 
@@ -27,6 +31,73 @@ const browserHeaders = {
 
 const blockedWebsiteStatuses = new Set([401, 403, 429, 451]);
 
+// SSRF IP Validation
+const checkSingleIP = (ip) => {
+  if (typeof ip !== 'string' || !net.isIP(ip)) return true; // Fail safe
+  
+  // Convert to ipv4 format if it's ipv6 mapped ipv4
+  if (ip.startsWith('::ffff:')) {
+    ip = ip.substring(7);
+  }
+  
+  if (net.isIPv4(ip)) {
+    const parts = ip.split('.').map(Number);
+    return (
+      parts[0] === 10 || // 10.0.0.0/8
+      (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) || // 172.16.0.0/12
+      (parts[0] === 192 && parts[1] === 168) || // 192.168.0.0/16
+      parts[0] === 127 || // Loopback
+      parts[0] === 169 || // Link-local
+      parts[0] === 0 || // Current network
+      parts[0] >= 224 // Multicast and reserved
+    );
+  }
+
+  if (net.isIPv6(ip)) {
+    return (
+      ip === '::1' || // Loopback
+      ip === '::' || // Unspecified
+      ip.toLowerCase().startsWith('fc') || // Unique local
+      ip.toLowerCase().startsWith('fd') ||
+      ip.toLowerCase().startsWith('fe8') || // Link local
+      ip.toLowerCase().startsWith('fe9') ||
+      ip.toLowerCase().startsWith('fea') ||
+      ip.toLowerCase().startsWith('feb') ||
+      ip.toLowerCase().startsWith('ff') // Multicast
+    );
+  }
+  
+  return true;
+};
+
+export const isPrivateIP = (address) => {
+  if (Array.isArray(address)) {
+    return address.some(entry => {
+      const ipStr = typeof entry === 'string' ? entry : entry?.address;
+      return checkSingleIP(ipStr);
+    });
+  }
+  const ipStr = typeof address === 'string' ? address : address?.address;
+  return checkSingleIP(ipStr);
+};
+
+const safeLookup = (hostname, options, callback) => {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+  dns.lookup(hostname, options, (err, address, family) => {
+    if (err) return callback(err);
+    if (isPrivateIP(address)) {
+      return callback(new Error(`SSRF Prevention: Resolved IP for ${hostname} is blocked.`));
+    }
+    callback(null, address, family);
+  });
+};
+
+const httpAgent = new http.Agent({ lookup: safeLookup });
+const httpsAgent = new https.Agent({ lookup: safeLookup });
+
 const createHttpError = (status) => {
   const error = new Error(`Failed to fetch URL. HTTP ${status}.`);
   error.statusCode = status;
@@ -51,6 +122,9 @@ export const fetchUrl = async (url) => {
       maxRedirects: 5,
 
       headers: browserHeaders,
+      
+      httpAgent,
+      httpsAgent,
 
       validateStatus: (status) => status >= 200 && status < 400,
     });

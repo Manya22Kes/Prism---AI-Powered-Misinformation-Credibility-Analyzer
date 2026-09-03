@@ -1,5 +1,6 @@
 import { processImage } from '../processors/image/index.js';
-import { analyzeContent } from '../services/analysis.service.js';
+import { analyzeContent } from "../services/analysis.service.js";
+import { logActivity } from "../services/activity.service.js";
 
 export const analyzeImage = async (req, res, next) => {
   if (!req.file) {
@@ -33,16 +34,32 @@ export const analyzeImage = async (req, res, next) => {
       sourceType: processedImage.sourceType,
       originalInput: processedImage.originalInput,
       processedContent: processedImage.processedContent,
-    });
+    }, sendEvent);
 
     sendEvent({ stage: "finalize", message: "Scoring and generating final report..." });
 
-    report.metadata.file = processedImage.metadata.file;
-    report.metadata.ocr = processedImage.metadata.ocr;
+    report.set('metadata', {
+      ...(report.metadata ? report.metadata.toObject() : {}),
+      ...processedImage.metadata
+    });
     await report.save();
+    
+    const title = report.metadata?.title || report.metadata?.urlMetadata?.title || report.originalInput || "Report";
+    await logActivity({
+      eventType: "ANALYSIS_COMPLETED",
+      entityType: "Report",
+      entityId: report._id,
+      title: `Analyzed: ${title}`
+    });
 
     sendEvent({ stage: "complete", reportId: report._id });
   } catch (error) {
+    await logActivity({
+      eventType: "ANALYSIS_FAILED",
+      entityType: "System",
+      title: "Analysis Failed: Image",
+      description: error.message || "An unexpected error occurred."
+    }).catch(e => console.error("Failed to log activity", e));
     sendEvent({ stage: "error", message: error.message || "An unexpected error occurred." });
   } finally {
     clearInterval(keepAlive);

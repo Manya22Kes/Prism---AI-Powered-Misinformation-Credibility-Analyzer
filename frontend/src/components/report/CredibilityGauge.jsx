@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export const CredibilityGauge = ({ score, size = 120, strokeWidth = 10, animated = true }) => {
+export const CredibilityGauge = ({ score, size = 120, strokeWidth = 10, animated = true, isNotApplicable = false }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   // We want a semi-circle or 3/4 circle. Let's do a 3/4 circle (270 degrees).
@@ -10,7 +10,8 @@ export const CredibilityGauge = ({ score, size = 120, strokeWidth = 10, animated
   
   // Determine color based on score
   let colorClass = "text-prism-high"; // Green
-  if (score < 40) colorClass = "text-prism-low"; // Red
+  if (isNotApplicable) colorClass = "text-prism-text-secondary"; // Neutral
+  else if (score < 40) colorClass = "text-prism-low"; // Red
   else if (score < 70) colorClass = "text-prism-medium"; // Yellow
 
   return (
@@ -43,9 +44,9 @@ export const CredibilityGauge = ({ score, size = 120, strokeWidth = 10, animated
           strokeDasharray={`${arcLength} ${circumference - arcLength}`}
           strokeLinecap="round"
           initial={animated ? { strokeDashoffset: arcLength } : false}
-          animate={{ strokeDashoffset: dashoffset }}
+          animate={{ strokeDashoffset: isNotApplicable ? arcLength : dashoffset }}
           transition={{ duration: 1.5, ease: "easeOut" }}
-          style={{ strokeDashoffset: !animated ? dashoffset : undefined }}
+          style={{ strokeDashoffset: !animated ? (isNotApplicable ? arcLength : dashoffset) : undefined }}
         />
       </svg>
       {/* Score Text */}
@@ -54,11 +55,11 @@ export const CredibilityGauge = ({ score, size = 120, strokeWidth = 10, animated
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="text-3xl font-bold tracking-tighter text-prism-text-primary"
+          className={`text-3xl font-bold tracking-tighter ${isNotApplicable ? 'text-prism-text-secondary text-2xl' : 'text-prism-text-primary'}`}
         >
-          {score}%
+          {isNotApplicable ? 'N/A' : `${score}%`}
         </motion.span>
-        <span className="text-xs text-prism-text-secondary uppercase tracking-widest">Score</span>
+        <span className="text-xs text-prism-text-secondary uppercase tracking-widest">{isNotApplicable ? 'Not Comparable' : 'Score'}</span>
       </div>
     </div>
   );

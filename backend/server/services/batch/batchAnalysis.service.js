@@ -6,7 +6,7 @@ import buildBatchAnalysisPrompt, {
 import { generateAnalysis } from "../ai.service.js";
 
 
-export const analyzeBatchSinglePromptStrategy = async (input) => {
+export const analyzeBatchSinglePromptStrategy = async (input, individualReports) => {
   const { processedContent, metadata, failedFiles } = input;
 
   if (!processedContent) {
@@ -16,33 +16,54 @@ export const analyzeBatchSinglePromptStrategy = async (input) => {
   const analysisHash = generateHash(processedContent);
   const status = failedFiles && failedFiles.length > 0 ? "partial_success" : "processing";
 
-  const report = await BatchAnalysisReport.create({
-    status: status,
+  const prompt = buildBatchAnalysisPrompt(processedContent);
+  const startTime = Date.now();
+
+  // Re-use the existing AI engine generic call
+  let analysis = await generateAnalysis(prompt);
+  
+  if (!analysis || typeof analysis !== 'object') {
+    analysis = {};
+  }
+
+  // Ensure overallCredibility matches the Mongoose Schema Enum
+  const validCredibilities = ["High", "Medium", "Low", "Mixed", "Not Applicable"];
+  let rawCredibility = analysis.overallCredibility;
+  
+  if (typeof rawCredibility === 'string') {
+     // Don't modify "Not Applicable", but title-case others
+     if (rawCredibility.toLowerCase() === 'not applicable') {
+       rawCredibility = 'Not Applicable';
+     } else {
+       rawCredibility = rawCredibility.charAt(0).toUpperCase() + rawCredibility.slice(1).toLowerCase();
+     }
+  }
+  
+  if (!validCredibilities.includes(rawCredibility)) {
+    rawCredibility = "Not Applicable"; // Default to Not Applicable if confused
+  }
+  
+  analysis.overallCredibility = rawCredibility;
+
+  const processingDuration = Date.now() - startTime;
+
+  const report = new BatchAnalysisReport({
+    status: failedFiles && failedFiles.length > 0 ? "partial_success" : "completed",
     originalInput: "batch_upload",
     processedContent,
     analysisHash,
     failedFiles: failedFiles || [],
+    reports: individualReports ? individualReports.map(r => r._id) : [],
+    analysis: analysis,
     metadata: {
       provider: "Google",
       model: process.env.GEMINI_MODEL,
-      processingDuration: 0,
+      processingDuration: processingDuration,
       analysisVersion: 1,
       promptVersion: BATCH_PROMPT_VERSION,
       batch: metadata.batch // Transfer batch metadata stats
     },
   });
-
-  const prompt = buildBatchAnalysisPrompt(processedContent);
-  const startTime = Date.now();
-
-  // Re-use the existing AI engine generic call
-  const analysis = await generateAnalysis(prompt);
-
-  const processingDuration = Date.now() - startTime;
-
-  report.analysis = analysis;
-  report.status = failedFiles && failedFiles.length > 0 ? "partial_success" : "completed";
-  report.metadata.processingDuration = processingDuration;
 
   await report.save();
   return report;

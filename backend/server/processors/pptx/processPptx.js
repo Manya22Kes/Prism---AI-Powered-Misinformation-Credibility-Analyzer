@@ -7,13 +7,13 @@ import { PPTX_CONFIG } from "../../config/pptx.config.js";
 import ApiError from "../../utils/ApiError.js";
 
 
-const processPptx = async (fileBuffer, mimetype, size) => {
+const processPptx = async (file) => {
   // 1. Validation
-  validatePptx(fileBuffer, mimetype, size);
+  validatePptx(file.buffer, file.mimetype, file.size);
 
   let zip;
   try {
-    zip = await JSZip.loadAsync(fileBuffer);
+    zip = await JSZip.loadAsync(file.buffer);
   } catch (error) {
     if (error.message && error.message.includes("encrypted")) {
       throw new ApiError(400, "Password-protected files are not supported.");
@@ -100,6 +100,7 @@ const processPptx = async (fileBuffer, mimetype, size) => {
   // 5. Metadata Schema Mapping
   const metadata = {
     file: {
+      originalname: file.originalname,
       mimeType: mimetype,
       size,
     },

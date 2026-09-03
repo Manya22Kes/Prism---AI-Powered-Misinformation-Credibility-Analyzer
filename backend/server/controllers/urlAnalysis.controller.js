@@ -1,4 +1,5 @@
 import { analyzeContent } from "../services/analysis.service.js";
+import { logActivity } from "../services/activity.service.js";
 import { processUrl } from "../processors/url/index.js";
 import {
   URL_BLOCKED_ERROR_CODE,
@@ -62,8 +63,24 @@ export const analyzeUrl = async (req, res, next) => {
     report.metadata.isArticle = isArticle;
 
     await report.save();
+    
+    const title = report.metadata?.title || report.metadata?.urlMetadata?.title || report.originalInput || "Report";
+    await logActivity({
+      eventType: "ANALYSIS_COMPLETED",
+      entityType: "Report",
+      entityId: report._id,
+      title: `Analyzed: ${title}`
+    });
 
     sendEvent({ stage: "complete", reportId: report._id });} catch (error) {
+    console.log("CATCH BLOCK REACHED:", error.message);
+    await logActivity({
+      eventType: "ANALYSIS_FAILED",
+      entityType: "System",
+      title: "Analysis Failed: Url",
+      description: error.message || "An unexpected error occurred."
+    }).catch(e => console.error("Failed to log activity", e));
+    
     if (error.code === URL_BLOCKED_ERROR_CODE) {
       sendEvent({ stage: "error", message: URL_BLOCKED_MESSAGE });
     } else {

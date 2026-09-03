@@ -13,11 +13,11 @@ export const Button = React.forwardRef(({
   const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-300 ease-out focus-ring disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]";
   
   const variants = {
-    primary: "bg-prism-accent text-white shadow-prism-glow hover:shadow-prism-glow-active hover:bg-prism-accent/90 border border-white/10",
+    primary: "bg-prism-accent text-prism-text-primary shadow-prism-glow hover:shadow-prism-glow-active hover:bg-prism-accent/90 border border-prism-text-primary/10",
     secondary: "bg-prism-surface-hover text-prism-text-primary border border-prism-border hover:bg-prism-surface-active hover:border-prism-accent/40",
     outline: "border border-prism-accent/60 text-prism-accent hover:bg-prism-accent-glow hover:border-prism-accent",
     ghost: "text-prism-text-secondary hover:text-prism-text-primary hover:bg-prism-surface-hover",
-    danger: "bg-prism-low text-white shadow-prism-glow-danger hover:bg-prism-low/90",
+    danger: "bg-prism-low text-prism-text-primary shadow-prism-glow-danger hover:bg-prism-low/90",
   };
 
   const sizes = {

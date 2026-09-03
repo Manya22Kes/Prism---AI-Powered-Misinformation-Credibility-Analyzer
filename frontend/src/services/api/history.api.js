@@ -9,6 +9,13 @@ export const historyApi = {
   },
 
   /**
+   * Get saved reports
+   */
+  getSavedReports: (params) => {
+    return api.get('/history/saved', { params });
+  },
+
+  /**
    * Get a specific report by ID
    */
   getReportById: (id) => {
@@ -23,10 +30,17 @@ export const historyApi = {
   },
   
   /**
-   * Toggle pin status of a report (handles both single and batch)
+   * Toggle the pinned status of a report
    */
   togglePin: (id) => {
     return api.patch(`/history/${id}/pin`);
+  },
+
+  /**
+   * Toggle the saved status of a report
+   */
+  toggleSave: (id) => {
+    return api.patch(`/history/${id}/save`);
   },
 
   /**

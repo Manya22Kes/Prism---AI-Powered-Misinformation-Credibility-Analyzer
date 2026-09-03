@@ -59,8 +59,8 @@ Status: `200 OK`
       ]
     },
     "metadata": {
-      "provider": "gemini-2.5-flash",
-      "model": "gemini-2.5-flash",
+      "provider": "gemini-3.7-flash",
+      "model": "gemini-3.7-flash",
       "processingDuration": 1200,
       "analysisVersion": 1
     }
@@ -130,8 +130,8 @@ Status: `200 OK`
       ]
     },
     "metadata": {
-      "provider": "gemini-2.5-flash",
-      "model": "gemini-2.5-flash",
+      "provider": "gemini-3.7-flash",
+      "model": "gemini-3.7-flash",
       "processingDuration": 1500,
       "analysisVersion": 1,
       "pageType": "Article",
@@ -242,7 +242,7 @@ Status: `200 OK`
 ```json
 {
   "status": "ok",
-  "version": "1.0.0",
-  "provider": "gemini-2.5-flash"
+  "version": "4.2.0",
+  "provider": "gemini-3.7-flash"
 }
 ```

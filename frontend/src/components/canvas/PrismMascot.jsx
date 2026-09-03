@@ -5,6 +5,7 @@ import { useCinematicStore } from '../../store/cinematicStore';
 import * as THREE from 'three';
 import { useThemeStore } from '../../store/themeStore';
 import { useExperienceStore } from '../../store/experienceStore';
+import { useSettingsStore } from '../../store/settingsStore';
 
 export const PrismMascot = ({ mousePosition = { normalizedX: 0, normalizedY: 0 } }) => {
   const meshRef = useRef();
@@ -18,11 +19,16 @@ export const PrismMascot = ({ mousePosition = { normalizedX: 0, normalizedY: 0 }
   const environmentalProfile = useExperienceStore((state) => state.environmentalProfile);
   const { theme } = useThemeStore();
   const isLight = theme === 'light';
+  const reducedMotion = useSettingsStore((state) => state.settings.reducedMotion);
   
   // Optical Glass Parameters: Slower, heavier, more deliberate rotation driven by Experience Controller
   const config = useMemo(() => {
     const baseScale = 2.4;
     let baseConfig;
+
+    if (reducedMotion) {
+      return { rotSpeed: 0, pulseSpeed: 0, pulseIntensity: 0, floatSpeed: 0, scale: baseScale, targetLight: isLight ? 1.8 : 1.3 };
+    }
     
     switch (activeEnvironmentState) {
       case 'idle':
@@ -165,42 +171,60 @@ export const PrismMascot = ({ mousePosition = { normalizedX: 0, normalizedY: 0 }
         <mesh ref={meshRef} receiveShadow castShadow>
           <octahedronGeometry args={[1, 0]} />
           
-          {/* Dense Optical Flint Glass (IoR 1.62 in Light mode for vivid edge definition and internal refractions) */}
+          {/* Optical Flint Glass: Glowing Ruby in Light Mode, Pristine Crown Crystal in Dark Mode */}
           <MeshTransmissionMaterial 
             ref={materialRef}
             backside
             samples={20}
-            thickness={isLight ? 2.5 : 2.2}
-            chromaticAberration={isLight ? 0.08 : 0.06} // Vivid optical dispersion in Light mode
-            anisotropy={0.15}
+            thickness={isLight ? 1.2 : 2.2}
+            chromaticAberration={isLight ? 0.08 : 0.06}
+            anisotropy={isLight ? 0.2 : 0.15}
             distortion={0}
             distortionScale={0}
             temporalDistortion={0}
-            ior={isLight ? 1.62 : 1.52} // Flint Glass in Light mode vs Crown Glass in Dark
-            color="#ffffff"
-            attenuationDistance={8}
-            attenuationColor={isLight ? '#0284c7' : '#f8fafc'}
+            ior={isLight ? 1.58 : 1.52}
+            color={isLight ? '#f43f5e' : '#ffffff'}
+            attenuationDistance={isLight ? 10 : 8}
+            attenuationColor={isLight ? '#fb7185' : '#f8fafc'}
             roughness={0.01}
-            envMapIntensity={isLight ? 2.4 : 1.8}
+            envMapIntensity={isLight ? 1.4 : 1.8}
             clearcoat={1}
             clearcoatRoughness={0.01}
+            reflectivity={1.0}
             transparent={true}
-            transmission={1}
+            transmission={isLight ? 0.92 : 1}
             opacity={!isSequenceComplete && openingSequenceStep < 3 ? 0 : 1}
           />
         </mesh>
 
-        {/* Soft internal spectral glow keeping the settled prism calm & alive */}
-        <pointLight ref={lightRef} position={[0, 0, 0]} color={isLight ? '#0284c7' : '#38bdf8'} intensity={isLight ? 1.8 : 1.3} distance={6} />
+        {/* Internal Core Light */}
+        <pointLight 
+          ref={lightRef} 
+          position={[0, 0, 0]} 
+          color={isLight ? '#ff1e56' : '#38bdf8'} 
+          intensity={isLight ? 3.2 : 1.3} 
+          distance={6} 
+        />
       </Float>
 
-      {/* External Key & Rim Lighting */}
-      <directionalLight position={[5, 5, 5]} intensity={isLight ? 2.2 : 1.6} color="#ffffff" />
-      <directionalLight 
-        position={[-5, -5, -5]} 
-        intensity={(isLight ? 0.9 : 0.6) * (environmentalProfile === 'missionControl' ? 1.4 : 1.0)} 
-        color={isLight ? '#38bdf8' : '#818cf8'} 
-      />
+      {/* External Key & Rim Lighting: Exactly original 2 lights for Dark Mode, Ruby facet lights for Light Mode */}
+      {isLight ? (
+        <>
+          <directionalLight position={[6, 8, 5]} intensity={2.4} color="#ffe4e6" />
+          <directionalLight position={[-8, 6, 4]} intensity={2.8} color="#ff2a5f" />
+          <directionalLight position={[8, -4, 4]} intensity={2.8} color="#f43f5e" />
+          <directionalLight position={[0, -8, 3]} intensity={2.0} color="#fb7185" />
+        </>
+      ) : (
+        <>
+          <directionalLight position={[5, 5, 5]} intensity={1.6} color="#ffffff" />
+          <directionalLight 
+            position={[-5, -5, -5]} 
+            intensity={0.6 * (environmentalProfile === 'missionControl' ? 1.4 : 1.0)} 
+            color="#818cf8" 
+          />
+        </>
+      )}
       <Environment preset="city" />
     </group>
   );

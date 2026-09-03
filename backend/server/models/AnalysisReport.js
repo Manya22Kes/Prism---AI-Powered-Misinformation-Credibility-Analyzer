@@ -23,6 +23,12 @@ const analysisReportSchema = new mongoose.Schema(
       index: true,
     },
     
+    isSaved: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    
     status: {
       type: String,
       enum: ANALYSIS_STATUS,
@@ -148,6 +154,11 @@ const analysisReportSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Indexes for common query patterns
+analysisReportSchema.index({ createdAt: -1 });
+analysisReportSchema.index({ isSaved: 1, createdAt: -1 });
+analysisReportSchema.index({ batchId: 1 });
 
 const AnalysisReport = mongoose.model("AnalysisReport", analysisReportSchema);
 

@@ -63,7 +63,7 @@ export const RiskIndicator = (props) => {
       )}
     >
       <div className="flex items-start gap-4 cursor-pointer group" onClick={() => hasDetails && setIsOpen(!isOpen)}>
-        <div className={cn("p-2 rounded-lg bg-black/40 border border-white/5 flex-shrink-0 mt-0.5", config.color)}>
+        <div className={cn("p-2 rounded-lg bg-prism-surface-active/60 dark:bg-black/40 border border-prism-text-primary/10 flex-shrink-0 mt-0.5", config.color)}>
           <Icon size={20} />
         </div>
         
@@ -72,17 +72,17 @@ export const RiskIndicator = (props) => {
             <span className={cn("text-[10px] font-mono uppercase px-2 py-0.5 rounded border font-bold tracking-widest", config.bg, config.border, config.color)}>
               {level} RISK
             </span>
-            <span className="text-[10px] font-mono text-white/50 bg-black/20 px-2 py-0.5 rounded border border-white/5">
+            <span className="text-[10px] font-mono text-prism-text-secondary bg-prism-surface-active dark:bg-black/20 px-2 py-0.5 rounded border border-prism-text-primary/10">
               {affectedClaim}
             </span>
           </div>
           
-          <h4 className="text-sm font-semibold text-white tracking-wide mb-1 truncate">
+          <h4 className="text-sm font-semibold text-prism-text-primary tracking-wide mb-1 truncate">
             {riskType}
           </h4>
           
           {shortExplanation && (
-            <p className="text-xs text-gray-300 leading-relaxed font-sans pr-4 line-clamp-2">
+            <p className="text-xs text-prism-text-secondary dark:text-gray-300 leading-relaxed font-sans pr-4 line-clamp-2">
               {shortExplanation}
             </p>
           )}
@@ -92,7 +92,7 @@ export const RiskIndicator = (props) => {
           <div className="pt-1">
             <ChevronDown 
               size={18} 
-              className={cn("text-white/40 transition-transform duration-300", isOpen && "rotate-180")} 
+              className={cn("text-prism-text-primary/40 transition-transform duration-300", isOpen && "rotate-180")} 
             />
           </div>
         )}
@@ -106,12 +106,12 @@ export const RiskIndicator = (props) => {
             exit={{ height: 0, opacity: 0, marginTop: 0 }}
             className="overflow-hidden"
           >
-            <div className="pt-4 border-t border-white/10 space-y-4">
+            <div className="pt-4 border-t border-prism-text-primary/10 space-y-4">
               
               {props.evidenceQuote && (
-                <div className="bg-black/30 rounded-lg p-3 border border-white/5 relative">
-                  <MessageSquareWarning size={14} className="absolute top-3 left-3 text-white/30" />
-                  <p className="text-[11px] text-white/70 italic leading-relaxed pl-7 pr-2 font-serif">
+                <div className="bg-prism-surface-active/60 dark:bg-black/30 rounded-lg p-3 border border-prism-text-primary/10 relative">
+                  <MessageSquareWarning size={14} className="absolute top-3 left-3 text-prism-text-primary/30" />
+                  <p className="text-[11px] text-prism-text-primary/70 italic leading-relaxed pl-7 pr-2 font-serif">
                     "{props.evidenceQuote}"
                   </p>
                 </div>
@@ -122,7 +122,7 @@ export const RiskIndicator = (props) => {
                   <span className={cn("text-[9px] uppercase font-bold tracking-wider mb-1 block", config.color)}>
                     Why it matters
                   </span>
-                  <p className="text-xs text-gray-400 leading-relaxed">
+                  <p className="text-xs text-prism-text-secondary dark:text-gray-400 leading-relaxed">
                     {props.whyItMatters}
                   </p>
                 </div>
@@ -132,7 +132,7 @@ export const RiskIndicator = (props) => {
               {props.issues && Array.isArray(props.issues) && props.issues.length > 0 && (
                 <ul className="space-y-1.5">
                   {props.issues.map((issue, idx) => (
-                    <li key={idx} className="text-[11px] text-white/60 flex items-start gap-2">
+                    <li key={idx} className="text-[11px] text-prism-text-primary/60 flex items-start gap-2">
                       <span className={cn("mt-1 text-[8px]", config.color)}>●</span>
                       <span className="leading-snug">{issue}</span>
                     </li>

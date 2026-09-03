@@ -45,17 +45,17 @@ export const FramingBadge = ({ indicator, theme = "amber" }) => {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className={cn("p-3 mt-1.5 rounded-lg border bg-black/40 space-y-3", theme === "amber" ? "border-amber-500/10" : "border-rose-500/10")}>
+            <div className={cn("p-3 mt-1.5 rounded-lg border bg-prism-surface-active/60 dark:bg-black/40 space-y-3", theme === "amber" ? "border-amber-500/10" : "border-rose-500/10")}>
               {(indicator.shortDescription || indicator.explanation) && (
-                <p className="text-xs text-white/70 leading-relaxed font-sans">
+                <p className="text-xs text-prism-text-primary/70 leading-relaxed font-sans">
                   {indicator.shortDescription || indicator.explanation}
                 </p>
               )}
               
               {indicator.evidenceQuote && (
-                <div className="bg-black/40 rounded p-2.5 border border-white/5 relative">
-                  <MessageSquareWarning size={12} className="absolute top-2.5 left-2 text-white/30" />
-                  <p className="text-[11px] text-white/60 italic leading-relaxed pl-6 font-serif">
+                <div className="bg-prism-surface-active/60 dark:bg-black/40 rounded p-2.5 border border-prism-text-primary/10 relative">
+                  <MessageSquareWarning size={12} className="absolute top-2.5 left-2 text-prism-text-primary/30" />
+                  <p className="text-[11px] text-prism-text-primary/70 italic leading-relaxed pl-6 font-serif">
                     "{indicator.evidenceQuote}"
                   </p>
                 </div>
@@ -66,7 +66,7 @@ export const FramingBadge = ({ indicator, theme = "amber" }) => {
                   <span className={cn("text-[9px] uppercase font-bold tracking-wider mb-0.5 block", theme === "amber" ? "text-amber-400/80" : "text-rose-400/80")}>
                     Why it matters
                   </span>
-                  <p className="text-[11px] text-white/50 leading-relaxed">
+                  <p className="text-[11px] text-prism-text-primary/50 leading-relaxed">
                     {indicator.whyItMatters}
                   </p>
                 </div>

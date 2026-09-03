@@ -105,6 +105,30 @@ const metadataSchema = new mongoose.Schema(
         trim: true,
       },
     },
+
+    file: {
+      originalname: { type: String, trim: true },
+      mimeType: { type: String, trim: true },
+      size: { type: Number },
+    },
+
+    batch: {
+      fileCount: { type: Number },
+      containsImages: { type: Boolean },
+      containsAudio: { type: Boolean },
+      containsDocuments: { type: Boolean },
+      processingTime: { type: Number },
+      totalCharacters: { type: Number },
+      truncated: {
+        isTruncated: { type: Boolean },
+        reason: { type: String },
+      },
+      files: [{
+        filename: { type: String },
+        sourceType: { type: String },
+        metadata: { type: mongoose.Schema.Types.Mixed },
+      }]
+    },
   },
   {
     _id: false,

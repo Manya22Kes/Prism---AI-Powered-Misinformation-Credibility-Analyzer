@@ -1,5 +1,6 @@
 import { analyzeContent } from "../services/analysis.service.js";
 import { processText } from "../processors/text/index.js";
+import { logActivity } from "../services/activity.service.js";
 
 export const analyzeText = async (req, res, next) => {
   const { content } = req.body;
@@ -45,7 +46,20 @@ export const analyzeText = async (req, res, next) => {
     report.metadata = { ...report.metadata, ...metadata };
     await report.save();
 
+    await logActivity({
+      eventType: "ANALYSIS_COMPLETED",
+      entityType: "Report",
+      entityId: report._id,
+      title: `Analyzed Text`
+    });
+
     sendEvent({ stage: "complete", reportId: report._id });} catch (error) {
+    await logActivity({
+      eventType: "ANALYSIS_FAILED",
+      entityType: "System",
+      title: "Analysis Failed: Text",
+      description: error.message || "An unexpected error occurred."
+    }).catch(e => console.error("Failed to log activity", e));
     sendEvent({ stage: "error", message: error.message || "An unexpected error occurred." });
   } finally {
     clearInterval(keepAlive);

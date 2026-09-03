@@ -1,8 +1,8 @@
 import { processPptx } from "../processors/pptx/index.js";
 import { analyzeContent } from "../services/analysis.service.js";
+import { logActivity } from "../services/activity.service.js";
 
 export const analyzePptx = async (req, res, next) => {
-  console.log("PPTX Request received. File:", req.file ? `Size: ${req.file.size} bytes, Mimetype: ${req.file.mimetype}` : "None");
   if (!req.file) {
     return res.status(400).json({ success: false, message: "No PPTX file provided." });
   }
@@ -23,7 +23,7 @@ export const analyzePptx = async (req, res, next) => {
   try {
     sendEvent({ stage: "extracting", message: "Extracting slides and speaker notes..." });
 
-    const processedData = await processPptx(req.file.buffer, req.file.mimetype, req.file.size);
+    const processedData = await processPptx(req.file);
 
     sendEvent({ stage: "analyzing", message: "AI analyzing credibility and detecting bias..." });
 
@@ -31,14 +31,31 @@ export const analyzePptx = async (req, res, next) => {
       sourceType: processedData.sourceType,
       originalInput: processedData.originalInput,
       processedContent: processedData.processedContent,
-    });
+    }, sendEvent);
 
     sendEvent({ stage: "finalize", message: "Scoring and generating final report..." });
 
-    report.metadata = { ...report.metadata, ...processedData.metadata };
+    report.set('metadata', {
+      ...(report.metadata ? report.metadata.toObject() : {}),
+      ...processedData.metadata
+    });
     await report.save();
+    
+    const title = report.metadata?.title || report.metadata?.urlMetadata?.title || report.originalInput || "Report";
+    await logActivity({
+      eventType: "ANALYSIS_COMPLETED",
+      entityType: "Report",
+      entityId: report._id,
+      title: `Analyzed: ${title}`
+    });
 
     sendEvent({ stage: "complete", reportId: report._id });} catch (error) {
+    await logActivity({
+      eventType: "ANALYSIS_FAILED",
+      entityType: "System",
+      title: "Analysis Failed: Pptx",
+      description: error.message || "An unexpected error occurred."
+    }).catch(e => console.error("Failed to log activity", e));
     sendEvent({ stage: "error", message: error.message || "An unexpected error occurred." });
   } finally {
     clearInterval(keepAlive);

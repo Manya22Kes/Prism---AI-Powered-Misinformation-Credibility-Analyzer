@@ -1,5 +1,3 @@
-import api from './axios';
-
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
 /**
@@ -16,8 +14,8 @@ const streamResponse = async (url, options, onEvent) => {
     try {
       const errorData = await response.json();
       errorMsg = errorData.message || errorMsg;
-    } catch (e) {
-      // Not JSON
+    } catch {
+      // Non-JSON response body fallback
     }
     throw new Error(errorMsg);
   }
@@ -101,6 +99,16 @@ export const analysisApi = {
     return streamResponse('/analyze/batch', {
       method: 'POST',
       body: formData,
+    }, onEvent);
+  },
+
+  /**
+   * Re-analyze an existing report
+   */
+  reanalyze: (id, onEvent) => {
+    return streamResponse(`/analyze/${id}/reanalyze`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
     }, onEvent);
   },
 };
