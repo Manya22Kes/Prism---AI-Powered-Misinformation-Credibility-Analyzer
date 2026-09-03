@@ -11,6 +11,10 @@
 
 *The high-performance, interactive client application for the Prism AI Multi-Modal Credibility & Misinformation Analysis Platform.*
 
+<br />
+
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Launch%20Client-00f2fe?style=for-the-badge)](https://your-deployed-app-link.here)
+
 </div>
 
 ---
