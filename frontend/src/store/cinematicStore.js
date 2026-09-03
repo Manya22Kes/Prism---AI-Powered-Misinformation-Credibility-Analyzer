@@ -1,12 +1,15 @@
 import { create } from 'zustand';
 
+// Check if we've already played the opening sequence this session
+const hasPlayedSequence = typeof window !== 'undefined' && sessionStorage.getItem('prism_sequence_played') === 'true';
+
 export const useCinematicStore = create((set) => ({
   // Core states
   prismState: 'idle',
-  ambientIntensity: 1,
+  ambientIntensity: hasPlayedSequence ? 1 : 0,
   
-  openingSequenceStep: 7,
-  isSequenceComplete: true,
+  openingSequenceStep: hasPlayedSequence ? 7 : 0,
+  isSequenceComplete: hasPlayedSequence,
   
   // 3D positioning
   prismPosition: [0, 0, 0], // x, y, z
@@ -26,6 +29,11 @@ export const useCinematicStore = create((set) => ({
   skipSequence: () => {
     sessionStorage.setItem('prism_sequence_played', 'true');
     set({ openingSequenceStep: 7, isSequenceComplete: true, ambientIntensity: 1, fogIntensity: 0 });
+  },
+
+  replaySequence: () => {
+    sessionStorage.removeItem('prism_sequence_played');
+    set({ openingSequenceStep: 0, isSequenceComplete: false, ambientIntensity: 0, fogIntensity: 0 });
   },
 
   setSequenceStep: (step) => {

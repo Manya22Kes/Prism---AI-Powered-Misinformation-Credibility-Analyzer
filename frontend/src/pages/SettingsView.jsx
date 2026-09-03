@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Monitor, Shield, Database, Key, CheckCircle2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Moon, Sun, Monitor, Shield, Database, Key, CheckCircle2, AlertTriangle, RefreshCw, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useSettingsStore } from '../store/settingsStore';
+import { useCinematicStore } from '../store/cinematicStore';
 import { healthApi } from '../services/api/health.api';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from '../components/shared/Card';
@@ -10,6 +12,8 @@ import { cn } from '../utils/cn';
 import toast from 'react-hot-toast';
 
 export const SettingsView = () => {
+  const navigate = useNavigate();
+  const replaySequence = useCinematicStore((state) => state.replaySequence);
   const [activeTab, setActiveTab] = useState('appearance');
   const { settings, updateSetting, resetToDefaults, isInitialized, initialize } = useSettingsStore();
   const { theme = 'dark', reducedMotion = false, autoRefresh = true, autoRefreshInterval = 60 } = settings || {};
@@ -197,6 +201,23 @@ export const SettingsView = () => {
                           </div>
                         </div>
                       )}
+
+                      <div className="flex items-center justify-between pt-2 border-t border-prism-border/40">
+                        <div>
+                          <p className="text-prism-text-primary font-medium">Cinematic Intro</p>
+                          <p className="text-sm text-prism-text-secondary">Replay the full 3D refractive opening sequence.</p>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            replaySequence();
+                            navigate('/');
+                          }}
+                          className="px-4 py-2 rounded-xl text-xs font-mono uppercase tracking-wider bg-prism-cyan/15 hover:bg-prism-cyan/25 text-prism-cyan border border-prism-cyan/30 transition-all flex items-center gap-2 font-semibold shadow-[0_0_15px_rgba(34,211,238,0.15)]"
+                        >
+                          <Sparkles size={14} className="animate-spin text-prism-cyan" />
+                          Replay Intro
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </Card>
