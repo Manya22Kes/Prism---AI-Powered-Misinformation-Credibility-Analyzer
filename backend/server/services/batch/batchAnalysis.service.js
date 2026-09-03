@@ -6,7 +6,7 @@ import buildBatchAnalysisPrompt, {
 import { generateAnalysis } from "../ai.service.js";
 
 
-export const analyzeBatchSinglePromptStrategy = async (input, individualReports) => {
+export const analyzeBatchSinglePromptStrategy = async (input, individualReports, onProgress = null) => {
   const { processedContent, metadata, failedFiles } = input;
 
   if (!processedContent) {
@@ -20,7 +20,7 @@ export const analyzeBatchSinglePromptStrategy = async (input, individualReports)
   const startTime = Date.now();
 
   // Re-use the existing AI engine generic call
-  let analysis = await generateAnalysis(prompt);
+  let analysis = await generateAnalysis(prompt, onProgress);
   
   if (!analysis || typeof analysis !== 'object') {
     analysis = {};
@@ -57,7 +57,7 @@ export const analyzeBatchSinglePromptStrategy = async (input, individualReports)
     analysis: analysis,
     metadata: {
       provider: "Google",
-      model: process.env.GEMINI_MODEL,
+      model: analysis?._modelUsed || process.env.GEMINI_MODEL || "gemini-3.7-flash",
       processingDuration: processingDuration,
       analysisVersion: 1,
       promptVersion: BATCH_PROMPT_VERSION,

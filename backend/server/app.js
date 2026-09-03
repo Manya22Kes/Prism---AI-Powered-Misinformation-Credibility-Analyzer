@@ -16,6 +16,8 @@ import rateLimit from "express-rate-limit";
 import logger from "./utils/logger.js";
 
 const app = express();
+app.set("trust proxy", 1); // Trust Nginx reverse proxy in Docker/production
+
 // Global Middleware
 app.use(helmet({
   crossOriginResourcePolicy: false, // Ensure API resources can be fetched across configured origins

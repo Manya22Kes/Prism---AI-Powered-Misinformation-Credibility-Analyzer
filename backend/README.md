@@ -131,7 +131,17 @@ Results are saved as timestamped Markdown and JSON reports in `server/evaluation
 
 ---
 
-## 🚀 Running Locally
+## 🚀 Running the Backend
+
+### Via Docker (Part of full stack)
+From the repository root:
+```bash
+docker compose up backend -d
+```
+
+---
+
+### Locally via Node.js
 
 ### 1. Install Dependencies
 ```bash

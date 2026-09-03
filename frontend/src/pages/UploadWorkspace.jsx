@@ -9,6 +9,7 @@ import { Dropzone } from '../components/upload/Dropzone';
 import { Button } from '../components/shared/Button';
 import { Input } from '../components/shared/Input';
 import { AnalysisPipeline } from '../components/report/AnalysisPipeline';
+import toast from 'react-hot-toast';
 import { analysisApi } from '../services/api/analysis.api';
 import { useQuery } from '@tanstack/react-query';
 import { historyApi } from '../services/api/history.api';
@@ -159,6 +160,7 @@ export const UploadWorkspace = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentStage, setCurrentStage] = useState('');
   const [error, setError] = useState(null);
+  const [failoverNotice, setFailoverNotice] = useState(null);
   
   // Fetch real history items for dynamic Global Analysis Log
   const { data: historyResponse, isLoading: isHistoryLoading } = useQuery({
@@ -231,6 +233,7 @@ export const UploadWorkspace = () => {
     setIsProcessing(false);
     setCurrentStage('');
     setError(null);
+    setFailoverNotice(null);
     setIsRetrying(false);
     setEnvironmentWorkspace();
     setPrismPosition([4, 0, 0]);
@@ -244,6 +247,7 @@ export const UploadWorkspace = () => {
     setIsProcessing(true);
     setCurrentStage('extracting');
     setError(null);
+    setFailoverNotice(null);
     
     emitExperienceEvent('ANALYSIS_STARTED', { workloadIntensity });
     
@@ -253,6 +257,56 @@ export const UploadWorkspace = () => {
     try {
       await apiCall((event) => {
         if (!isMountedRef.current) return;
+
+        if (event.failoverNotice) {
+          setFailoverNotice(event.failoverNotice);
+          const isLight = theme === 'light';
+
+          toast(
+            (t) => (
+              <div className="flex items-start gap-2.5 py-0.5 max-w-full">
+                <div className={cn("text-base leading-none mt-0.5", isLight ? "text-blue-400" : "text-amber-400")}>⚡</div>
+                <div className="min-w-0 flex-1">
+                  <p className={cn("text-xs font-semibold font-mono tracking-wide uppercase", isLight ? "text-blue-300" : "text-amber-300")}>
+                    {event.failoverNotice.type === 'model_failover' ? 'Model Auto-Failover' : 'Traffic Spike Detected'}
+                  </p>
+                  <p className="text-[11px] text-slate-200 mt-1 leading-snug break-words">
+                    {event.failoverNotice.message}
+                  </p>
+                  {event.failoverNotice.fromModel && event.failoverNotice.toModel && (
+                    <div className="flex flex-wrap items-center gap-1.5 mt-1.5 text-[10px] font-mono">
+                      <span className={cn("px-1.5 py-0.5 rounded line-through", isLight ? "bg-slate-800 text-slate-400 border border-slate-700" : "bg-black/50 text-amber-300/70")}>
+                        {event.failoverNotice.fromModel}
+                      </span>
+                      <span className={isLight ? "text-blue-400 font-bold" : "text-amber-400 font-bold"}>→</span>
+                      <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40">
+                        {event.failoverNotice.toModel} (Active)
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ),
+            {
+              id: 'gemini-failover-toast',
+              duration: 7000,
+              style: {
+                background: isLight ? 'rgba(9, 21, 43, 0.98)' : 'rgba(15, 23, 42, 0.95)',
+                border: isLight ? '1px solid rgba(59, 130, 246, 0.4)' : '1px solid rgba(245, 158, 11, 0.4)',
+                boxShadow: isLight 
+                  ? '0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(37, 99, 235, 0.3)' 
+                  : '0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.25)',
+                backdropFilter: 'blur(16px)',
+                borderRadius: '16px',
+                color: '#fff',
+                padding: '12px 16px',
+                maxWidth: 'calc(100vw - 32px)',
+                margin: '0 auto',
+              },
+            }
+          );
+        }
+
         if (event.stage === 'error') {
           setError(event.message || 'An error occurred during analysis.');
           emitExperienceEvent('ANALYSIS_FAILED', { error: event.message });
@@ -396,6 +450,7 @@ export const UploadWorkspace = () => {
             onRetry={handleRetry}
             isRetrying={isRetrying}
             canRetry={canRetry}
+            failoverNotice={failoverNotice}
           />
         </div>
       )}

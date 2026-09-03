@@ -9,15 +9,33 @@ import {
 export const PROMPT_VERSION = "4.0";
 
 const buildAnalysisPrompt = (content) => {
+  const text = typeof content === "string" ? content : "";
+  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+  // Multipage indicators from PDF/Docx processors: e.g., "[Page 2]", "[Page 3]", "===== DOCUMENT X ====="
+  const isMultipage = /\[Page\s+[2-9]\d*\]/i.test(text) || /===== DOCUMENT \d+ =====/i.test(text);
+  
+  // Longer article indicator: articles with >= 1000 words are considered long/in-depth
+  const isLongArticle = wordCount >= 1000;
+  
+  const isComprehensive = isMultipage || isLongArticle;
+  const claimRange = isComprehensive ? "6–12" : "4–8";
+  
+  const documentScopeNote = isComprehensive
+    ? `NOTE ON SCOPE: This is a comprehensive, longer, or multi-page document (${wordCount} words${isMultipage ? ', multi-page' : ''}). Extract and conduct an in-depth investigation into 6–12 major claims to ensure thorough analytical coverage across all core sections and pages.`
+    : `NOTE ON SCOPE: This is a concise or standard document (${wordCount} words). Focus on extracting and investigating the 4–8 most critical claims.`;
+
   return `
-You are Prism, an AI Investigator. Your task is to extract and conduct a deep investigation into the 4–8 major claims made by the document below.
+You are Prism, an AI Investigator. Your task is to extract and conduct a deep investigation into the ${claimRange} major claims made by the document below.
+
+${documentScopeNote}
 
 DO NOT write an overall essay summary.
 DO NOT write a main thesis paragraph.
 DO NOT write duplicate risk sections.
 DO NOT invent questions. Write clear, natural, declarative major claims.
 
-Focus entirely on investigating the 4–8 major claims.
+Focus entirely on investigating the ${claimRange} major claims.
 Every higher-level insight (verdict, score, trust reasons, caution reasons, risks) will be derived automatically from your claim investigations.
 
 ═══════════════════════════════════════════════════════
@@ -30,9 +48,9 @@ STAGE 1: DOCUMENT CONTEXT
 4. Write ONE single sentence summarizing what the article is about.
 
 ═══════════════════════════════════════════════════════
-STAGE 2: EXTRACT 4–8 MAJOR CLAIMS
+STAGE 2: EXTRACT ${claimRange} MAJOR CLAIMS
 ═══════════════════════════════════════════════════════
-- Identify the 4–8 most important arguments made by the document.
+- Identify the ${claimRange} most important arguments made by the document.
 - Write each as a declarative claim statement (e.g. "Child memory reports contain verifiable details matching historical records.").
 - Assign a theme name, category, and importance.
 

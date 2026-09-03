@@ -79,7 +79,18 @@ The frontend leverages specialized **Zustand** stores for predictable, lightweig
 
 ---
 
-## 🚀 Running Locally
+## 🚀 Running the Frontend
+
+### Via Docker (Production Nginx + Reverse Proxy)
+From repository root:
+```bash
+docker compose up frontend -d
+```
+*Frontend runs on `http://localhost:80` with Nginx reverse proxying `/api/v1/` to the backend.*
+
+---
+
+### Locally via Vite Dev Server
 
 ### 1. Install Dependencies
 ```bash

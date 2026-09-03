@@ -41,7 +41,7 @@ export const Sidebar = () => {
       items: [
         { to: '/', label: 'Workspace', icon: LayoutDashboard },
         { to: '/archive', label: 'Archive', icon: Library, activeColor: 'text-emerald-400', activeBg: 'bg-emerald-500/10 border-emerald-500/20' },
-        { to: '/saved', label: 'Saved Reports', icon: Bookmark, activeColor: 'text-prism-accent', activeBg: 'bg-prism-accent/10 border-prism-accent/20' },
+        { to: '/saved', label: 'Saved Reports', icon: Bookmark, activeColor: 'text-emerald-400', activeBg: 'bg-emerald-500/10 border-emerald-500/20' },
         { to: '/collections', label: 'Collections', icon: FolderKanban, activeColor: 'text-prism-cyan', activeBg: 'bg-prism-cyan/10 border-prism-cyan/20' },
         { to: '/watchlist', label: 'Watchlist', icon: Eye },
       ]

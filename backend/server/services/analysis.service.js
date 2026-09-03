@@ -28,7 +28,7 @@ export const analyzeContent = async (input, onProgress) => {
 
     metadata: {
       provider: "Google",
-      model: process.env.GEMINI_MODEL,
+      model: process.env.GEMINI_MODEL || "gemini-3.7-flash",
       processingDuration: 0,
       analysisVersion: 4,
       promptVersion: PROMPT_VERSION,
@@ -51,9 +51,13 @@ export const analyzeContent = async (input, onProgress) => {
 
   let analysis;
   try {
-    analysis = await generateAnalysis(prompt);
+    analysis = await generateAnalysis(prompt, onProgress);
   } finally {
     clearTimeout(progressTimer);
+  }
+
+  if (onProgress) {
+    onProgress({ stage: "finalize", message: "Deriving overall verdict, trust drivers & credibility signals..." });
   }
 
   const processingDuration = Date.now() - startTime;
@@ -62,6 +66,10 @@ export const analyzeContent = async (input, onProgress) => {
   normalizedAnalysis.rawAiOutput = analysis;
 
   report.analysis = normalizedAnalysis;
+
+  if (analysis?._modelUsed) {
+    report.metadata.model = analysis._modelUsed;
+  }
 
   report.status = "completed";
 

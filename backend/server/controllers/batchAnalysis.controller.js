@@ -58,7 +58,7 @@ export const analyzeBatch = async (req, res, next) => {
 
     sendEvent({ stage: "analyzing", message: "Level 2: AI synthesizing cross-source relationships..." });
 
-    const report = await analyzeBatchContent(processorResult, individualReports);
+    const report = await analyzeBatchContent(processorResult, individualReports, sendEvent);
 
     sendEvent({ stage: "finalize", message: "Scoring and generating batch report..." });
 

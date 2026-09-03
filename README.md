@@ -124,14 +124,42 @@ flowchart TB
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🐳 Option A: Docker Deployment (Recommended)
+
+Run the entire Prism platform (React 19 Frontend, Express 5 Backend, and MongoDB) in a single command with zero local runtime setup:
+
+```bash
+# 1. Clone repository
+git clone https://github.com/Manya22Kes/Prism---AI-Powered-Misinformation-Credibility-Analyzer.git
+cd Prism---AI-Powered-Misinformation-Credibility-Analyzer
+
+# 2. Copy environment template & provide your Gemini API key
+cp .env.example .env
+# Edit .env and set: GEMINI_API_KEY=your_actual_key
+
+# 3. Launch all containers with Docker Compose
+docker compose up --build -d
+```
+
+- **Frontend Console**: Available at `http://localhost` (Port 80)
+- **Backend API Gateway**: Available at `http://localhost:5000/api/v1`
+- **MongoDB**: Provisioned and persistent via `mongo_data` volume
+
+To stop all services:
+```bash
+docker compose down
+```
+
+---
+
+### 💻 Option B: Local Manual Setup
+
+#### Prerequisites
 - **Node.js**: v20.x or higher
 - **MongoDB**: v6.x or higher (local instance or MongoDB Atlas cluster)
 - **Google Gemini API Key**: Obtainable from [Google AI Studio](https://aistudio.google.com/)
 
----
-
-### 1. Repository Setup
+#### 1. Repository Setup
 
 ```bash
 git clone https://github.com/Manya22Kes/Prism---AI-Powered-Misinformation-Credibility-Analyzer.git

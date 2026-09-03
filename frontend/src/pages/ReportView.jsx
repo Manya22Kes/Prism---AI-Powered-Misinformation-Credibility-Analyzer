@@ -22,6 +22,7 @@ import { EmptyState } from '../components/shared/EmptyState';
 import { useCinematicStore } from '../store/cinematicStore';
 import { useExperienceStore } from '../store/experienceStore';
 import { useSettingsStore } from '../store/settingsStore';
+import { useThemeStore } from '../store/themeStore';
 import toast from 'react-hot-toast';
 import { generatePDF } from '../utils/pdfExport';
 import { cn } from '../utils/cn';
@@ -69,6 +70,7 @@ export const ReportView = () => {
   const setEnvironmentWorkspace = useCinematicStore((state) => state.setEnvironmentWorkspace);
   const setPrismPosition = useCinematicStore((state) => state.setPrismPosition);
   const emitExperienceEvent = useExperienceStore((state) => state.emitExperienceEvent);
+  const { theme } = useThemeStore();
 
   const [copied, setCopied] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
@@ -197,6 +199,54 @@ export const ReportView = () => {
     
     try {
       await analysisApi.reanalyze(id, (event) => {
+        if (event.failoverNotice) {
+          const isLight = theme === 'light';
+
+          toast(
+            (t) => (
+              <div className="flex items-start gap-2.5 py-0.5 max-w-full">
+                <div className={cn("text-base leading-none mt-0.5", isLight ? "text-blue-400" : "text-amber-400")}>⚡</div>
+                <div className="min-w-0 flex-1">
+                  <p className={cn("text-xs font-semibold font-mono tracking-wide uppercase", isLight ? "text-blue-300" : "text-amber-300")}>
+                    {event.failoverNotice.type === 'model_failover' ? 'Model Auto-Failover' : 'Traffic Spike Detected'}
+                  </p>
+                  <p className="text-[11px] text-slate-200 mt-1 leading-snug break-words">
+                    {event.failoverNotice.message}
+                  </p>
+                  {event.failoverNotice.fromModel && event.failoverNotice.toModel && (
+                    <div className="flex flex-wrap items-center gap-1.5 mt-1.5 text-[10px] font-mono">
+                      <span className={cn("px-1.5 py-0.5 rounded line-through", isLight ? "bg-slate-800 text-slate-400 border border-slate-700" : "bg-black/50 text-amber-300/70")}>
+                        {event.failoverNotice.fromModel}
+                      </span>
+                      <span className={isLight ? "text-blue-400 font-bold" : "text-amber-400 font-bold"}>→</span>
+                      <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40">
+                        {event.failoverNotice.toModel} (Active)
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ),
+            {
+              id: 'gemini-failover-toast',
+              duration: 7000,
+              style: {
+                background: isLight ? 'rgba(9, 21, 43, 0.98)' : 'rgba(15, 23, 42, 0.95)',
+                border: isLight ? '1px solid rgba(59, 130, 246, 0.4)' : '1px solid rgba(245, 158, 11, 0.4)',
+                boxShadow: isLight 
+                  ? '0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(37, 99, 235, 0.3)' 
+                  : '0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.25)',
+                backdropFilter: 'blur(16px)',
+                borderRadius: '16px',
+                color: '#fff',
+                padding: '12px 16px',
+                maxWidth: 'calc(100vw - 32px)',
+                margin: '0 auto',
+              },
+            }
+          );
+        }
+
         if (event.stage === 'error') {
           setReanalyzeError(event.message || 'An error occurred during re-analysis.');
           emitExperienceEvent('ANALYSIS_FAILED', { error: event.message });
@@ -803,16 +853,16 @@ export const ReportView = () => {
           <span className={`text-xs font-mono px-3 py-1 rounded-full border ${
             risks.length > 0 
               ? "text-rose-600 dark:text-rose-300 bg-rose-500/10 dark:bg-rose-950/40 border-rose-500/20" 
-              : "text-emerald-600 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-950/40 border-emerald-500/20"
+              : "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-950/40 border-emerald-500/20 font-semibold"
           }`}>
             {risks.length > 0 ? `${risks.length} DETECTED` : "CLEAR"}
           </span>
         </div>
 
         {risks.length === 0 ? (
-          <div className="flex items-center gap-4 bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-xl text-emerald-100">
-            <ShieldCheck size={24} className="text-emerald-400 shrink-0" />
-            <span className="font-medium text-sm">{(analysis.riskSummary && analysis.riskSummary.message) || "No significant credibility anomalies detected."}</span>
+          <div className="flex items-center gap-4 bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-xl text-emerald-900 dark:text-emerald-100">
+            <ShieldCheck size={24} className="text-emerald-700 dark:text-emerald-400 shrink-0" />
+            <span className="font-semibold text-sm">{(analysis.riskSummary && analysis.riskSummary.message) || "No significant credibility anomalies detected."}</span>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
