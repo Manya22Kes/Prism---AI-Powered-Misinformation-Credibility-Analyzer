@@ -4,7 +4,7 @@ import {
   Share, Download, ChevronLeft, Check, Terminal, X,
   Globe, AlertCircle, Sparkles, Brain, Lightbulb, Search,
   CheckCircle2, AlertTriangle, Clock, BookOpen, User, FileText,
-  Pin, RefreshCw, Bookmark, ShieldCheck
+  Pin, RefreshCw, Bookmark, ShieldCheck, Copy
 } from 'lucide-react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
@@ -71,6 +71,7 @@ export const ReportView = () => {
   const setPrismPosition = useCinematicStore((state) => state.setPrismPosition);
   const emitExperienceEvent = useExperienceStore((state) => state.emitExperienceEvent);
   const { theme } = useThemeStore();
+  const isLight = theme === 'light';
 
   const [copied, setCopied] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
@@ -377,7 +378,7 @@ export const ReportView = () => {
 
   return (
     <div className={cn(
-      "relative mx-auto pb-20 pt-6 transition-all duration-700 ease-in-out space-y-8",
+      "relative mx-auto pb-20 pt-4 sm:pt-6 transition-all duration-700 ease-in-out space-y-6 sm:space-y-8 w-full min-w-0 px-0.5 sm:px-0",
       isReadingMode ? "max-w-4xl" : "max-w-6xl"
     )}>
 
@@ -419,18 +420,18 @@ export const ReportView = () => {
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="flex flex-wrap items-center justify-between gap-4"
+        className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 w-full min-w-0"
       >
         <Link 
           to={backTarget} 
-          className="flex items-center text-prism-text-secondary hover:text-prism-text-primary transition-colors group"
+          className="flex items-center text-prism-text-secondary hover:text-prism-text-primary transition-colors group shrink-0"
         >
-          <ChevronLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
-          <span className="tracking-wide uppercase text-sm font-medium">
+          <ChevronLeft size={20} className="mr-1.5 sm:mr-2 group-hover:-translate-x-1 transition-transform" />
+          <span className="tracking-wide uppercase text-xs sm:text-sm font-medium">
             {backLabel}
           </span>
         </Link>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 w-full sm:w-auto">
           {/* Reading Mode Toggle Button */}
           <Button 
             variant={isReadingMode ? "primary" : "ghost"}
@@ -505,10 +506,17 @@ export const ReportView = () => {
           </div>
 
           <Button
-            variant="ghost" size="sm" onClick={() => setDebugOpen(true)}
-            className="gap-2 text-xs font-mono text-cyan-400 hover:bg-cyan-950/40 border border-cyan-500/20"
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setDebugOpen(true)}
+            className={cn(
+              "gap-1.5 sm:gap-2 text-xs font-mono border transition-colors",
+              isLight 
+                ? "text-cyan-800 hover:bg-cyan-100/60 bg-cyan-50/80 border-cyan-300 shadow-xs" 
+                : "text-cyan-400 hover:bg-cyan-950/40 border-cyan-500/20"
+            )}
           >
-            <Terminal size={14} /> Deep Analysis
+            <Terminal size={14} className={isLight ? "text-cyan-700" : "text-cyan-400"} /> Deep Analysis
           </Button>
           <Button variant="ghost" size="sm" onClick={handleShare} className="gap-2 hover:bg-prism-text-primary/10 text-xs">
             {copied ? <Check size={16} className="text-emerald-400" /> : <Share size={16} />}
@@ -1049,27 +1057,66 @@ export const ReportView = () => {
       </motion.section>
 
 
-      {/* DEV MODE RAW AI OUTPUT DRAWER */}
+      {/* DEV MODE RAW AI OUTPUT DRAWER / DEEP ANALYSIS MODAL */}
       <AnimatePresence>
         {debugOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className={cn("fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 backdrop-blur-md", isLight ? "bg-slate-900/40" : "bg-black/80")}>
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-neutral-950 border border-prism-text-primary/20 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl"
+              className={cn(
+                "rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl border",
+                isLight 
+                  ? "bg-white border-pink-200/80 shadow-[0_25px_60px_-15px_rgba(244,63,94,0.12)] text-slate-900" 
+                  : "bg-neutral-950 border-prism-text-primary/20 text-prism-text-primary"
+              )}
             >
-              <div className="flex items-center justify-between px-6 py-4 border-b border-prism-text-primary/10 bg-prism-text-primary/5">
-                <div className="flex items-center gap-3">
-                  <Terminal size={18} className="text-cyan-400" />
-                  <h3 className="font-mono text-sm uppercase tracking-wider text-prism-text-primary">Development: Raw AI Output</h3>
+              <div className={cn(
+                "flex items-center justify-between px-5 sm:px-6 py-4 border-b",
+                isLight ? "bg-pink-50/70 border-pink-200/60" : "bg-prism-text-primary/5 border-prism-text-primary/10"
+              )}>
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <Terminal size={18} className={isLight ? "text-cyan-600" : "text-cyan-400"} />
+                  <h3 className={cn("font-mono text-xs sm:text-sm uppercase tracking-wider font-semibold", isLight ? "text-slate-800" : "text-prism-text-primary")}>
+                    Deep Analysis: Raw AI Output
+                  </h3>
                 </div>
-                <button onClick={() => setDebugOpen(false)} className="p-1 rounded-lg text-prism-text-primary/60 hover:text-prism-text-primary hover:bg-prism-text-primary/10 transition-colors">
-                  <X size={20} />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(JSON.stringify(rawAiOutput, null, 2));
+                      toast.success("JSON copied to clipboard");
+                    }}
+                    className={cn(
+                      "px-2.5 py-1 text-xs font-mono rounded-lg border transition-colors flex items-center gap-1.5 cursor-pointer",
+                      isLight 
+                        ? "bg-white hover:bg-slate-50 text-slate-700 border-pink-200/80 shadow-xs" 
+                        : "bg-white/5 hover:bg-white/10 text-prism-text-muted hover:text-white border-white/10"
+                    )}
+                    title="Copy JSON to clipboard"
+                  >
+                    <Copy size={13} />
+                    <span className="hidden sm:inline">Copy JSON</span>
+                  </button>
+                  <button 
+                    onClick={() => setDebugOpen(false)} 
+                    className={cn(
+                      "p-1.5 rounded-lg transition-colors cursor-pointer",
+                      isLight ? "text-slate-500 hover:text-slate-800 hover:bg-pink-100/60" : "text-prism-text-primary/60 hover:text-prism-text-primary hover:bg-prism-text-primary/10"
+                    )}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
               </div>
-              <div className="p-6 overflow-y-auto font-mono text-xs text-emerald-400 leading-relaxed bg-black/90">
-                <pre>{JSON.stringify(rawAiOutput, null, 2)}</pre>
+              <div className={cn(
+                "p-4 sm:p-6 overflow-y-auto font-mono text-xs leading-relaxed border-t",
+                isLight 
+                  ? "bg-[#0b101b] text-emerald-400 border-slate-800 selection:bg-emerald-500/30 selection:text-white" 
+                  : "bg-black/90 text-emerald-400 border-white/5"
+              )}>
+                <pre className="whitespace-pre-wrap break-all">{JSON.stringify(rawAiOutput, null, 2)}</pre>
               </div>
             </motion.div>
           </div>

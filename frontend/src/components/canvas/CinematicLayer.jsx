@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
@@ -10,14 +10,50 @@ import { useExperienceStore } from '../../store/experienceStore';
 import { PrismMascot } from './PrismMascot';
 import { cn } from '../../utils/cn';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FastForward } from 'lucide-react';
 
-// Plausible misinformation & news claim fragments
+// Plausible misinformation & news claim fragments with desktop and mobile non-overlapping layouts
 const CHAOS_ITEMS = [
-  { id: 1, raw: "Intermittent fasting increases lifespan by 40% in clinical trial.", tag: "EXAGGERATED CLAIM", detail: "CONTEXT: MICE TRIAL ONLY | HUMAN IMPACT UNPROVEN", pos: { top: '22%', left: '12%' } },
-  { id: 2, raw: "Researchers discover AI can detect depression from a single selfie.", tag: "UNSUBSTANTIATED", detail: "METHODOLOGY: OVERFITTED SAMPLE SIZE (N=42)", pos: { top: '32%', left: '58%' } },
-  { id: 3, raw: "Climate prediction models deliberately altered in official report.", tag: "FALSEHOOD DEBUNKED", detail: "EVIDENCE: AUDITED RAW METEOROLOGICAL DATA", pos: { top: '62%', left: '16%' } },
-  { id: 4, raw: "WHO quietly updated global vaccine safety guidance.", tag: "MISLEADING CONTEXT", detail: "FACT: STANDARD PERIODIC SCHEDULE REVISION", pos: { top: '72%', left: '52%' } },
-  { id: 5, raw: "Government study confirms 14% error rate in facial recognition.", tag: "PARTIALLY VERIFIED", detail: "BIAS: HIGH ERROR IN LOW-LIGHT ANGLE SCENARIOS", pos: { top: '18%', left: '68%' } }
+  { 
+    id: 1, 
+    raw: "Intermittent fasting increases lifespan by 40% in clinical trial.", 
+    tag: "EXAGGERATED CLAIM", 
+    detail: "CONTEXT: MICE TRIAL ONLY | HUMAN IMPACT UNPROVEN", 
+    pos: { top: '22%', left: '12%' },
+    mobilePos: { top: '10%', left: '5%', right: 'auto', maxWidth: '270px' }
+  },
+  { 
+    id: 2, 
+    raw: "Researchers discover AI can detect depression from a single selfie.", 
+    tag: "UNSUBSTANTIATED", 
+    detail: "METHODOLOGY: OVERFITTED SAMPLE SIZE (N=42)", 
+    pos: { top: '32%', left: '58%' },
+    mobilePos: null // Hidden on narrow mobile to prevent overlap with Item 5
+  },
+  { 
+    id: 3, 
+    raw: "Climate prediction models deliberately altered in official report.", 
+    tag: "FALSEHOOD DEBUNKED", 
+    detail: "EVIDENCE: AUDITED RAW METEOROLOGICAL DATA", 
+    pos: { top: '62%', left: '16%' },
+    mobilePos: { top: '63%', left: '5%', right: 'auto', maxWidth: '270px' }
+  },
+  { 
+    id: 4, 
+    raw: "WHO quietly updated global vaccine safety guidance.", 
+    tag: "MISLEADING CONTEXT", 
+    detail: "FACT: STANDARD PERIODIC SCHEDULE REVISION", 
+    pos: { top: '72%', left: '52%' },
+    mobilePos: { top: '78%', left: 'auto', right: '5%', maxWidth: '270px' }
+  },
+  { 
+    id: 5, 
+    raw: "Government study confirms 14% error rate in facial recognition.", 
+    tag: "PARTIALLY VERIFIED", 
+    detail: "BIAS: HIGH ERROR IN LOW-LIGHT ANGLE SCENARIOS", 
+    pos: { top: '18%', left: '68%' },
+    mobilePos: { top: '25%', left: 'auto', right: '5%', maxWidth: '270px' }
+  }
 ];
 
 // High-Visibility Volumetric Dust Cloud along Light Beam & Prism Path
@@ -493,25 +529,60 @@ export const CinematicLayer = ({ className }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isSequenceComplete, skipSequence]);
 
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const isLight = theme === 'light';
   const bgColor = isLight ? '#f7f7f5' : '#020202';
   const fogColor = isLight ? '#e8e8e2' : '#020202';
 
   return (
     <div 
-      className={cn("fixed inset-0 z-0 pointer-events-none overflow-hidden select-none transition-colors duration-500", className)}
+      className={cn("fixed inset-0 pointer-events-none overflow-hidden select-none transition-colors duration-500", !isSequenceComplete ? "z-50" : "z-0", className)}
       style={{ backgroundColor: bgColor }}
     >
       {/* Interactive Skip Intro Overlay Button during sequence */}
       {!isSequenceComplete && (
         <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          onClick={skipSequence}
-          className="absolute top-6 right-6 z-50 pointer-events-auto px-4 py-2 rounded-full font-mono text-xs uppercase tracking-widest bg-prism-text-primary/10 hover:bg-prism-text-primary/20 text-prism-text-primary/80 hover:text-prism-text-primary border border-prism-text-primary/20 backdrop-blur-md transition-all flex items-center gap-2"
+          type="button"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileTap={{ scale: 0.92 }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            skipSequence();
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            skipSequence();
+          }}
+          style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+          className={cn(
+            "fixed sm:absolute z-[9999] pointer-events-auto rounded-full font-mono uppercase tracking-wider backdrop-blur-md transition-all flex items-center shadow-lg cursor-pointer",
+            // Mobile specific: real, tactile, safe from status bar/notch, min 44px touch target
+            "top-[max(1rem,env(safe-area-inset-top))] right-[max(1rem,env(safe-area-inset-right))] min-h-[44px] px-4 py-2.5 text-xs font-bold gap-2",
+            isLight 
+              ? "bg-white/95 hover:bg-white text-slate-900 border border-slate-300 shadow-md active:bg-slate-100" 
+              : "bg-black/80 hover:bg-black/95 text-white border border-white/25 shadow-[0_4px_20px_rgba(0,0,0,0.6)] active:bg-black",
+            // Laptop/desktop specific: preserve exact layout and ESC badge
+            "sm:top-6 sm:right-6 sm:px-4 sm:py-2 sm:text-xs sm:tracking-widest sm:font-normal sm:min-h-0",
+            isLight
+              ? "sm:bg-prism-text-primary/10 sm:text-slate-700 sm:border-prism-text-primary/20"
+              : "sm:bg-prism-text-primary/10 sm:text-prism-text-primary/80 sm:border-prism-text-primary/20"
+          )}
+          aria-label="Skip Introduction"
         >
+          <FastForward size={14} className={isLight ? "text-cyan-600" : "text-cyan-400"} />
           <span>Skip Intro</span>
-          <span className="text-[10px] bg-prism-text-primary/20 px-1.5 py-0.5 rounded text-prism-text-primary/90">ESC</span>
+          <span className="hidden sm:inline-block text-[10px] bg-prism-text-primary/20 px-1.5 py-0.5 rounded text-prism-text-primary/90 ml-1">
+            ESC
+          </span>
         </motion.button>
       )}
 
@@ -542,11 +613,13 @@ export const CinematicLayer = ({ className }) => {
         {!isSequenceComplete && openingSequenceStep >= 1 && openingSequenceStep <= 5 && (
           <div className="absolute inset-0 z-10 pointer-events-none">
             {CHAOS_ITEMS.map((item, idx) => {
+              if (isMobile && !item.mobilePos) return null;
+              const currentPos = isMobile && item.mobilePos ? item.mobilePos : item.pos;
               const isTransformed = openingSequenceStep >= 4;
               return (
                 <motion.div
                   key={item.id}
-                  style={item.pos}
+                  style={currentPos}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{
                     opacity: isTransformed ? 0.95 : 0.55,
@@ -558,11 +631,11 @@ export const CinematicLayer = ({ className }) => {
                     y: { duration: 4 + idx, repeat: isTransformed ? 0 : Infinity, ease: "easeInOut" },
                     scale: { duration: 3 + idx, repeat: isTransformed ? 0 : Infinity, ease: "easeInOut" }
                   }}
-                  className="absolute max-w-sm"
+                  className="absolute max-w-[270px] sm:max-w-sm"
                 >
                   {!isTransformed ? (
                     // Plausible Claim Fragment in Darkness
-                    <div className={cn("font-mono text-xs p-3.5 rounded-lg backdrop-blur-sm shadow-lg leading-relaxed tracking-wide border", isLight ? "text-slate-700 bg-prism-text-primary/50 border-slate-200" : "text-gray-300 bg-white/[0.03] border-white/[0.08]")}>
+                    <div className={cn("font-mono text-[11px] sm:text-xs p-2.5 sm:p-3.5 rounded-lg backdrop-blur-sm shadow-lg leading-relaxed tracking-wide border", isLight ? "text-slate-700 bg-prism-text-primary/50 border-slate-200" : "text-gray-300 bg-white/[0.03] border-white/[0.08]")}>
                       <span className={cn("mr-2", isLight ? "text-slate-500" : "text-amber-400/80")}>?</span>
                       "{item.raw}"
                     </div>
@@ -572,14 +645,14 @@ export const CinematicLayer = ({ className }) => {
                       initial={{ opacity: 0, filter: "blur(10px)" }}
                       animate={{ opacity: 1, filter: "blur(0px)" }}
                       transition={{ duration: 1, delay: idx * 0.15 }}
-                      className={cn("font-mono text-xs p-3.5 rounded-xl backdrop-blur-md border", isLight ? "text-emerald-800 bg-emerald-100/50 border-emerald-500/20" : "text-emerald-300/90 bg-emerald-950/30 border-emerald-500/40")}
+                      className={cn("font-mono text-[11px] sm:text-xs p-2.5 sm:p-3.5 rounded-xl backdrop-blur-md border", isLight ? "text-emerald-800 bg-emerald-100/50 border-emerald-500/20" : "text-emerald-300/90 bg-emerald-950/30 border-emerald-500/40")}
                     >
-                      <div className="text-[10px] uppercase font-bold tracking-widest text-emerald-600 mb-1 flex items-center gap-1.5">
+                      <div className="text-[9px] sm:text-[10px] uppercase font-bold tracking-widest text-emerald-600 mb-1 flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         {item.tag}
                       </div>
-                      <div className="text-[11px] font-sans mb-1.5">"{item.raw}"</div>
-                      <div className="text-[9px] text-emerald-700/80 border-t border-emerald-500/20 pt-1">
+                      <div className="text-[10px] sm:text-[11px] font-sans mb-1.5">"{item.raw}"</div>
+                      <div className="text-[8px] sm:text-[9px] text-emerald-700/80 border-t border-emerald-500/20 pt-1">
                         {item.detail}
                       </div>
                     </motion.div>

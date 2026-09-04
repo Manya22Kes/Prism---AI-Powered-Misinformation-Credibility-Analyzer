@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useThemeStore } from '../../store/themeStore';
+import { useUserStore } from '../../store/userStore';
 import { GlobalSearchModal } from './GlobalSearchModal';
 import { cn } from '../../utils/cn';
 
@@ -24,9 +25,23 @@ const navItems = [
 
 export const Navbar = () => {
   const { theme, toggleTheme } = useThemeStore();
+  const { profileName, setProfileName } = useUserStore();
+  const isLight = theme === 'light';
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  const getInitials = (name) => {
+    if (!name) return 'PR';
+    return name.split(' ').map(n => n[0]).filter(Boolean).join('').substring(0, 2).toUpperCase() || 'PR';
+  };
+
+  const handleProfileClick = () => {
+    const newName = window.prompt("Enter new profile name:", profileName);
+    if (newName && newName.trim().length > 0) {
+      setProfileName(newName.trim());
+    }
+  };
 
   const handleCloseSearch = useCallback(() => {
     setIsSearchOpen(false);
@@ -72,7 +87,7 @@ export const Navbar = () => {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="h-20 flex items-center px-3 sm:px-6 md:px-12 justify-between z-10 w-full"
+        className="h-20 flex items-center px-4 sm:px-6 md:px-12 justify-between z-10 w-full px-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))]"
       >
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Mobile Menu Toggle */}
@@ -102,11 +117,11 @@ export const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-2.5 sm:gap-4 md:gap-6">
           {/* Mobile search button */}
           <button 
             onClick={() => setIsSearchOpen(true)}
-            className="md:hidden p-2.5 rounded-full bg-prism-text-primary/5 hover:bg-prism-text-primary/10 text-prism-text-secondary hover:text-prism-text-primary transition-colors"
+            className="md:hidden p-2 rounded-full bg-prism-text-primary/5 hover:bg-prism-text-primary/10 text-prism-text-secondary hover:text-prism-text-primary transition-colors"
             title="Search"
           >
             <Search size={18} />
@@ -116,7 +131,7 @@ export const Navbar = () => {
           <button 
             onClick={handleToggleTheme}
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-            className="p-2.5 rounded-full bg-prism-text-primary/5 hover:bg-prism-text-primary/10 border border-prism-text-primary/10 text-prism-text-secondary hover:text-prism-text-primary transition-all flex items-center gap-2"
+            className="p-2 sm:p-2.5 rounded-full bg-prism-text-primary/5 hover:bg-prism-text-primary/10 border border-prism-text-primary/10 text-prism-text-secondary hover:text-prism-text-primary transition-all flex items-center gap-2"
           >
             {theme === 'dark' ? (
               <Sun size={18} className="text-amber-300" />
@@ -126,6 +141,21 @@ export const Navbar = () => {
             <span className="text-xs font-mono uppercase tracking-wider hidden lg:inline">
               {theme === 'dark' ? 'Dark' : 'Light'}
             </span>
+          </button>
+
+          {/* Mobile Profile Avatar Button */}
+          <button
+            onClick={handleProfileClick}
+            className={cn(
+              "md:hidden w-8 h-8 rounded-full border flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm",
+              isLight 
+                ? "bg-pink-100 border-pink-300 text-rose-700 hover:bg-pink-200" 
+                : "bg-prism-text-primary/10 border-prism-cyan/30 text-prism-cyan hover:border-prism-cyan"
+            )}
+            title={`Profile: ${profileName} (Tap to change)`}
+            aria-label="User Profile"
+          >
+            <span className="text-[11px] font-mono font-bold tracking-wider">{getInitials(profileName)}</span>
           </button>
 
           <div className="text-xs text-prism-text-muted tracking-widest uppercase font-semibold hidden sm:block">
@@ -196,9 +226,43 @@ export const Navbar = () => {
                 ))}
               </nav>
 
+              {/* Dynamic User Profile Card in Drawer */}
+              <div 
+                onClick={handleProfileClick}
+                className={cn(
+                  "p-3 mb-2 rounded-xl border flex items-center gap-3 cursor-pointer transition-all",
+                  isLight
+                    ? "bg-pink-50/70 border-pink-200 hover:bg-pink-100/70 shadow-sm"
+                    : "bg-prism-surface-active/50 border-prism-border hover:border-prism-cyan/40"
+                )}
+                title="Tap to change profile name"
+              >
+                <div className={cn(
+                  "w-9 h-9 rounded-full border flex items-center justify-center shrink-0 font-mono font-bold text-xs shadow-sm",
+                  isLight
+                    ? "bg-pink-100 border-pink-300 text-rose-700"
+                    : "bg-prism-text-primary/10 border-cyan-400/40 text-cyan-400"
+                )}>
+                  {getInitials(profileName)}
+                </div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className={cn("text-xs font-semibold truncate", isLight ? "text-slate-800" : "text-prism-text-primary")}>
+                      {profileName}
+                    </span>
+                    <span className={cn("text-[9px] font-mono px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0", isLight ? "bg-emerald-100 text-emerald-800 border border-emerald-200" : "bg-emerald-950/60 border border-emerald-500/30 text-emerald-400")}>
+                      Enterprise
+                    </span>
+                  </div>
+                  <span className={cn("text-[10px] mt-0.5", isLight ? "text-slate-500" : "text-prism-text-muted")}>
+                    Tap to edit profile name
+                  </span>
+                </div>
+              </div>
+
               {/* Drawer Footer */}
               <div className="pt-4 border-t border-prism-border flex items-center justify-between text-xs text-prism-text-muted font-mono">
-                <span>PRISM v1.0</span>
+                <span>PRISM v4.2</span>
                 <span className="text-emerald-400">ONLINE</span>
               </div>
             </motion.div>

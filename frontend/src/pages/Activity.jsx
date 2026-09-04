@@ -160,18 +160,18 @@ export const Activity = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
       transition={{ duration: 0.5 }}
-      className="max-w-6xl mx-auto space-y-8 py-6 relative z-10"
+      className="max-w-6xl mx-auto space-y-6 sm:space-y-8 py-4 sm:py-6 relative z-10 w-full min-w-0"
     >
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-prism-text-primary/10 pb-6 gap-4">
-        <div>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-prism-text-primary/10 pb-6 gap-4 w-full min-w-0">
+        <div className="min-w-0">
           <span className="text-xs font-mono tracking-widest text-emerald-400 uppercase">Forensic Trace</span>
-          <h1 className="text-4xl font-light text-prism-text-primary tracking-wide mt-1">Audit Activity Log</h1>
-          <p className="text-sm text-prism-text-secondary mt-2 max-w-2xl">
+          <h1 className="text-2xl sm:text-4xl font-light text-prism-text-primary tracking-wide mt-1">Audit Activity Log</h1>
+          <p className="text-xs sm:text-sm text-prism-text-secondary mt-2 max-w-2xl">
             Complete immutable audit trail of document uploads, queries, organization, and model outputs.
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2.5 sm:gap-3 w-full sm:w-auto">
           <Button 
             size="sm" 
             className={cn(
@@ -200,18 +200,18 @@ export const Activity = () => {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 w-full min-w-0">
         {metrics.map((m, idx) => (
-          <div key={idx} className="p-5 rounded-2xl glass-panel-blue">
-            <span className="text-xs font-mono text-prism-text-muted uppercase tracking-wider">{m.label}</span>
-            <div className={cn("text-3xl font-light mt-2 transition-colors", m.valueColor)}>{m.value}</div>
-            <span className={cn("text-xs font-mono mt-1 block transition-colors", m.changeColor)}>{m.change}</span>
+          <div key={idx} className="p-4 sm:p-5 rounded-2xl glass-panel-blue min-w-0 overflow-hidden">
+            <span className="text-xs font-mono text-prism-text-muted uppercase tracking-wider block truncate">{m.label}</span>
+            <div className={cn("text-2xl sm:text-3xl font-light mt-1.5 sm:mt-2 transition-colors truncate", m.valueColor)}>{m.value}</div>
+            <span className={cn("text-xs font-mono mt-1 block transition-colors truncate", m.changeColor)}>{m.change}</span>
           </div>
         ))}
       </div>
 
       {/* Main Glass Workspace Card */}
-      <div className="p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-xl relative overflow-hidden space-y-6">
+      <div className="p-4 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-xl relative overflow-hidden space-y-4 sm:space-y-6 w-full min-w-0">
         <div className="flex items-center justify-between border-b border-prism-text-primary/5 pb-4">
           <div className="flex items-center gap-3">
             <Cpu className="text-cyan-400 animate-pulse" size={20} />
@@ -260,30 +260,31 @@ export const Activity = () => {
                     animate={{ opacity: 1, y: 0 }}
                     onClick={() => handleEventClick(activity)}
                     className={cn(
-                      "p-4 rounded-xl glass-panel border border-prism-border flex flex-col gap-2 transition-colors",
+                      "p-3.5 sm:p-4 rounded-xl glass-panel border border-prism-border flex flex-col gap-2 transition-colors min-w-0 w-full overflow-hidden",
                       !isDeletedEvent && "hover:border-prism-cyan/50 cursor-pointer hover:shadow-prism-glow"
                     )}
                   >
-                    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                      <div className="flex items-center gap-3">
-                        <span className="opacity-70">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1.5 sm:gap-2 min-w-0">
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <span className="opacity-70 shrink-0">
                           {EVENT_ICONS[activity.eventType] || <ActivityIcon size={14} className="text-prism-text-muted" />}
                         </span>
-                        <span className="uppercase tracking-wider font-semibold opacity-90">{activity.eventType.replace(/_/g, ' ')}</span>
+                        <span className="uppercase tracking-wider font-semibold opacity-90 text-[11px] sm:text-xs truncate">{activity.eventType.replace(/_/g, ' ')}</span>
                       </div>
                       
-                      <div className="flex items-center gap-4 text-emerald-400/70">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-emerald-400/70 text-[10px] sm:text-xs min-w-0">
                         <span>SYS_ID: {activity.entityId ? activity.entityId.slice(-8).toUpperCase() : 'NULL'}</span>
+                        <span className="opacity-40">•</span>
                         <span>{new Date(activity.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'medium' })}</span>
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between mt-1 pl-7">
-                      <span className="text-sm font-sans font-light text-prism-text-primary truncate max-w-[70%]">
+                    <div className="flex items-center justify-between mt-1 pl-6 sm:pl-7 min-w-0">
+                      <span className="text-xs sm:text-sm font-sans font-light text-prism-text-primary truncate max-w-full">
                         {activity.title}
                       </span>
                       {!isDeletedEvent && (
-                        <span className="text-[10px] text-prism-cyan/70 opacity-0 group-hover:opacity-100 flex items-center gap-1 uppercase tracking-widest">
+                        <span className="text-[10px] text-prism-cyan/70 opacity-0 group-hover:opacity-100 hidden sm:flex items-center gap-1 uppercase tracking-widest shrink-0 ml-2">
                           ACCESS RECORD <ArrowUpRight size={12} />
                         </span>
                       )}

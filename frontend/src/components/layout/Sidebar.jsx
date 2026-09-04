@@ -160,7 +160,10 @@ export const Sidebar = () => {
             transition={{ duration: 0.2 }}
           >
             <span className={cn("text-xs font-medium whitespace-nowrap", isLight ? "text-slate-800" : "text-prism-text-primary")}>{profileName}</span>
-            <span className={cn("text-[9px] font-mono whitespace-nowrap font-semibold", isLight ? "text-emerald-600" : "text-emerald-400")}>Enterprise Tier</span>
+            <div className="flex items-center gap-1.5 whitespace-nowrap">
+              <span className={cn("text-[9px] font-mono whitespace-nowrap font-semibold", isLight ? "text-emerald-600" : "text-emerald-400")}>Enterprise Tier</span>
+              <span className="text-[9px] font-mono text-prism-text-muted opacity-60">• v4.2</span>
+            </div>
           </motion.div>
         </div>
       </div>

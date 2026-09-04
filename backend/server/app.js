@@ -23,8 +23,21 @@ app.use(helmet({
   crossOriginResourcePolicy: false, // Ensure API resources can be fetched across configured origins
 }));
 
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost,http://localhost:80,http://127.0.0.1,http://localhost:5173")
+  .split(",")
+  .map((url) => url.trim());
+
 const corsOptions = {
-  origin: process.env.NODE_ENV === "production" ? process.env.FRONTEND_URL : "*",
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, server-to-server, mobile wrappers)
+    if (!origin || process.env.NODE_ENV !== "production") {
+      return callback(null, true);
+    }
+    if (allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
   credentials: true,
 };
 app.use(cors(corsOptions));

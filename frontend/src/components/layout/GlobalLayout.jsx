@@ -42,7 +42,7 @@ const GlobalLayout = ({ children }) => {
   const showUI = isSequenceComplete || !isHomePage || openingSequenceStep >= 6;
 
   return (
-    <div className="relative min-h-screen text-prism-text-primary overflow-hidden transition-colors duration-500 bg-transparent">
+    <div className={`relative min-h-screen text-prism-text-primary overflow-hidden transition-colors duration-500 bg-transparent ${!showUI ? 'pointer-events-none' : ''}`}>
       
       {/* Ambient Light Refraction (Mouse Reactive over 3D background) */}
       <AnimatePresence>
@@ -74,19 +74,19 @@ const GlobalLayout = ({ children }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative z-10 flex h-screen w-full bg-transparent"
+            className="relative z-10 flex h-screen w-full bg-transparent overflow-hidden"
           >
             {/* Sidebar */}
             <Sidebar />
             
-            <main className="flex-1 flex flex-col h-full relative bg-transparent">
+            <main className="flex-1 flex flex-col h-full relative bg-transparent min-w-0 w-full overflow-hidden">
               {/* Navbar */}
               <div className="w-full">
                 <Navbar />
               </div>
               
               {/* Main Content Area */}
-              <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 md:p-12 w-full max-w-screen-2xl mx-auto">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 md:p-12 px-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] w-full max-w-screen-2xl mx-auto min-w-0">
                 {children}
               </div>
             </main>

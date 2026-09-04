@@ -103,7 +103,7 @@ export const Watchlist = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto h-full flex flex-col pb-12 pt-6 relative">
+    <div className="max-w-7xl mx-auto h-full flex flex-col pb-12 pt-4 sm:pt-6 relative w-full min-w-0">
       
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-prism-cyan/5 blur-[120px] pointer-events-none rounded-full" />
@@ -160,7 +160,7 @@ export const Watchlist = () => {
                   
                   {/* Main Row */}
                   <div className={cn(
-                    "flex flex-col md:flex-row items-stretch md:items-center p-4 gap-4 transition-colors relative",
+                    "flex flex-col md:flex-row items-stretch md:items-center p-3.5 sm:p-4 gap-3 sm:gap-4 transition-colors relative min-w-0 w-full",
                     hasChange ? "bg-prism-surface-active/30" : "bg-prism-surface"
                   )}>
                     {hasChange && (
@@ -168,7 +168,7 @@ export const Watchlist = () => {
                     )}
                     
                     {/* Expand Toggle & Basic Info */}
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                    <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full">
                       <button 
                         onClick={() => toggleExpand(item._id)}
                         className="p-1 rounded hover:bg-prism-surface-active text-prism-text-muted hover:text-prism-text-primary transition-colors shrink-0"
@@ -176,9 +176,9 @@ export const Watchlist = () => {
                         {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
                       </button>
                       
-                      <div className="flex flex-col min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="text-base font-medium text-prism-text-primary truncate">{item.name}</h4>
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-1 min-w-0">
+                          <h4 className="text-sm sm:text-base font-medium text-prism-text-primary truncate min-w-0 flex-1">{item.name}</h4>
                           <span className={cn(
                             "text-[10px] px-1.5 py-0.5 rounded border uppercase tracking-widest shrink-0",
                             statusLabel === 'ACTIVE' ? "bg-prism-cyan/10 border-prism-cyan/30 text-prism-cyan" :
@@ -188,17 +188,17 @@ export const Watchlist = () => {
                             {statusLabel}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-prism-text-secondary truncate">
-                          <span className="font-semibold uppercase text-prism-text-muted tracking-wider">{item.targetType}</span>
-                          <span className="opacity-50">•</span>
-                          <span className="truncate" title={item.target}>{item.target}</span>
+                        <div className="flex items-center gap-2 text-xs text-prism-text-secondary min-w-0 w-full">
+                          <span className="font-semibold uppercase text-prism-text-muted tracking-wider shrink-0">{item.targetType}</span>
+                          <span className="opacity-50 shrink-0">•</span>
+                          <span className="truncate min-w-0 flex-1" title={item.target}>{item.target}</span>
                         </div>
                       </div>
                     </div>
                     
                     {/* Stats */}
-                    <div className="flex items-center gap-6 px-4 py-2 bg-prism-surface-active/20 rounded-lg md:bg-transparent md:px-0 md:py-0 shrink-0">
-                      <div className="flex flex-col items-center">
+                    <div className="flex items-center justify-between sm:justify-start gap-4 sm:gap-6 px-3.5 py-2.5 bg-prism-surface-active/20 rounded-lg md:bg-transparent md:px-0 md:py-0 w-full md:w-auto min-w-0">
+                      <div className="flex flex-col items-center md:items-start shrink-0">
                         <span className="text-[10px] uppercase tracking-widest text-prism-text-muted mb-1">Latest Score</span>
                         <div className="flex items-center justify-center gap-2">
                           <span className={cn("text-xl font-bold font-mono tracking-tighter leading-none", getScoreColor(item.lastScore))}>
@@ -212,9 +212,9 @@ export const Watchlist = () => {
                         </div>
                       </div>
                       
-                      <div className="flex flex-col min-w-[120px] items-center text-center">
+                      <div className="flex flex-col items-center md:items-start text-center md:text-left min-w-0 flex-1 md:flex-initial md:min-w-[120px]">
                         <span className="text-[10px] uppercase tracking-widest text-prism-text-muted mb-1">Verdict</span>
-                        <span className="text-sm text-prism-text-primary truncate">
+                        <span className="text-xs sm:text-sm text-prism-text-primary truncate max-w-full">
                           {item.lastVerdict || 'Pending'}
                         </span>
                       </div>
@@ -228,35 +228,37 @@ export const Watchlist = () => {
                     </div>
                     
                     {/* Actions */}
-                    <div className="flex items-center justify-end gap-2 shrink-0 border-t border-prism-border/40 md:border-none pt-3 md:pt-0">
-                      {item.lastAnalysisId && (
-                        <Link to={`/report/${item.lastAnalysisId}`} className="p-2 rounded-lg text-prism-text-muted hover:text-prism-cyan hover:bg-prism-surface-hover transition-colors" title="View Latest Report">
-                          <ExternalLink size={18} />
-                        </Link>
-                      )}
-                      
-                      <button 
-                        onClick={() => toggleActiveMutation.mutate({ id: item._id, isActive: item.isActive })}
-                        className="p-2 rounded-lg text-prism-text-muted hover:text-prism-text-primary hover:bg-prism-surface-hover transition-colors"
-                        title={item.isActive ? "Pause Monitoring" : "Resume Monitoring"}
-                      >
-                        {item.isActive ? <PauseCircle size={18} /> : <PlayCircle size={18} />}
-                      </button>
-                      
-                      <button 
-                        onClick={() => setItemToDelete(item._id)}
-                        className="p-2 rounded-lg text-prism-text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors"
-                        title="Delete Watch Item"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                    <div className="flex flex-wrap items-center justify-between md:justify-end gap-2 border-t border-prism-border/40 md:border-none pt-3 md:pt-0 w-full md:w-auto">
+                      <div className="flex items-center gap-1">
+                        {item.lastAnalysisId && (
+                          <Link to={`/report/${item.lastAnalysisId}`} className="p-2 rounded-lg text-prism-text-muted hover:text-prism-cyan hover:bg-prism-surface-hover transition-colors" title="View Latest Report">
+                            <ExternalLink size={18} />
+                          </Link>
+                        )}
+                        
+                        <button 
+                          onClick={() => toggleActiveMutation.mutate({ id: item._id, isActive: item.isActive })}
+                          className="p-2 rounded-lg text-prism-text-muted hover:text-prism-text-primary hover:bg-prism-surface-hover transition-colors"
+                          title={item.isActive ? "Pause Monitoring" : "Resume Monitoring"}
+                        >
+                          {item.isActive ? <PauseCircle size={18} /> : <PlayCircle size={18} />}
+                        </button>
+                        
+                        <button 
+                          onClick={() => setItemToDelete(item._id)}
+                          className="p-2 rounded-lg text-prism-text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors"
+                          title="Delete Watch Item"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
                       
                       <Button 
                         variant="secondary" 
                         size="sm"
                         disabled={checkMutation.isPending && checkMutation.variables === item._id}
                         onClick={() => checkMutation.mutate(item._id)}
-                        className={cn("gap-2 ml-2", item.targetType !== 'URL' && "opacity-50 cursor-not-allowed")}
+                        className={cn("gap-1.5 sm:gap-2 ml-auto md:ml-2 text-xs", item.targetType !== 'URL' && "opacity-50 cursor-not-allowed")}
                         title={item.targetType !== 'URL' ? "Manual checking only supported for URLs currently" : "Check now"}
                       >
                         <RefreshCw size={14} className={cn(checkMutation.isPending && checkMutation.variables === item._id && "animate-spin")} />
