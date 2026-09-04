@@ -15,10 +15,10 @@
 
 <br />
 
-[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Launch%20Prism-00f2fe?style=for-the-badge)](https://your-deployed-app-link.here)
-[![API Gateway](https://img.shields.io/badge/⚡%20API%20Status-Live%20Endpoints-10b981?style=for-the-badge)](https://your-deployed-backend-link.here)
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Launch%20Prism-00f2fe?style=for-the-badge)](https://prism-ai-powered-misinformation-cre.vercel.app)
+[![API Gateway](https://img.shields.io/badge/⚡%20API%20Status-Live%20Endpoints-10b981?style=for-the-badge)](https://prism-ai-powered-misinformation.onrender.com/api/v1/health)
 
-**[👉 Click here to access the Live Application: https://your-deployed-app-link.here](https://your-deployed-app-link.here)**
+**[👉 Click here to access the Live Application: https://prism-ai-powered-misinformation-cre.vercel.app](https://prism-ai-powered-misinformation-cre.vercel.app)**
 
 </div>
 
@@ -28,10 +28,8 @@
 
 | Service | Environment | Status | Link |
 | :--- | :--- | :--- | :--- |
-| **Prism Web Console** | Production Client | Live | [https://your-deployed-app-link.here](https://your-deployed-app-link.here) |
-| **Prism API Gateway** | Production REST & SSE | Live | [https://your-deployed-backend-link.here](https://your-deployed-backend-link.here) |
-
-> 💡 *To update your deployment, replace `https://your-deployed-app-link.here` with your live frontend URL (e.g. Vercel, Netlify) and `https://your-deployed-backend-link.here` with your backend URL (e.g. Render, Railway, Google Cloud Run).*
+| **Prism Web Console** | Production Client (Vercel) | [![Live](https://img.shields.io/badge/Status-Online-emerald.svg)](https://prism-ai-powered-misinformation-cre.vercel.app) | [https://prism-ai-powered-misinformation-cre.vercel.app](https://prism-ai-powered-misinformation-cre.vercel.app) |
+| **Prism API Gateway** | Production REST & SSE (Render) | [![Operational](https://img.shields.io/badge/Status-Operational-emerald.svg)](https://prism-ai-powered-misinformation.onrender.com/api/v1/health) | [https://prism-ai-powered-misinformation.onrender.com/api/v1](https://prism-ai-powered-misinformation.onrender.com/api/v1) |
 
 ---
 

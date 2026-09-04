@@ -13,7 +13,7 @@
 
 <br />
 
-[![Live API Gateway](https://img.shields.io/badge/⚡%20Live%20API-Active%20Gateway-10b981?style=for-the-badge)](https://your-deployed-backend-link.here)
+[![Live API Gateway](https://img.shields.io/badge/⚡%20Live%20API-Active%20Gateway-10b981?style=for-the-badge)](https://prism-ai-powered-misinformation.onrender.com/api/v1/health)
 
 </div>
 
